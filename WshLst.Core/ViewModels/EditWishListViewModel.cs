@@ -1,5 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Cirrious.MvvmCross.Commands;
 using WshLst.Core.Models;
 
 namespace WshLst.Core.ViewModels
@@ -21,6 +23,10 @@ namespace WshLst.Core.ViewModels
 			get { return string.IsNullOrEmpty(ListId) ? "New Wish List" : "Edit Wish List"; }
 		}
 
+		public ICommand SaveCommand
+		{
+			get { return new MvxRelayCommand(Save); }
+		}
 
 		public void Save()
 		{
@@ -67,11 +73,16 @@ namespace WshLst.Core.ViewModels
 					{
 						Name = t.Result.Name;
 						Description = t.Result.Description;
-						RaisePropertyChanged("Name");
-						RaisePropertyChanged("Description");
-						RaisePropertyChanged("ViewTitle");
+						RaisePropertyChanged(() => Name);
+						RaisePropertyChanged(() => Description);
+						RaisePropertyChanged(() => ViewTitle);
 					}
 				});
+		}
+
+		public ICommand CancelCommand
+		{
+			get { return new MvxRelayCommand(Cancel); }
 		}
 
 		public void Cancel()

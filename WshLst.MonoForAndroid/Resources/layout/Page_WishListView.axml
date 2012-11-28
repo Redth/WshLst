@@ -16,6 +16,6 @@
         android:layout_height="fill_parent"
         android:orientation="vertical"
         local:MvxItemTemplate="@layout/listitem_entry"
-        local:MvxBind="{'ItemsSource':{'Path':'Entries'}}"
+        local:MvxBind="{'ItemsSource':{'Path':'Entries'},'ItemClick':{'Path':'SelectCommand'}}"
       />
 </FrameLayout>

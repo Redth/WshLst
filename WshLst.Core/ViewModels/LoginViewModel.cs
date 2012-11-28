@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Cirrious.MvvmCross.Commands;
 using Cirrious.MvvmCross.ExtensionMethods;
 using Microsoft.WindowsAzure.MobileServices;
 using WshLst.Core.Interfaces;
@@ -35,13 +37,18 @@ namespace WshLst.Core.ViewModels
 			set
 			{
 				_platforms = value;
-				RaisePropertyChanged("Platforms");
+				RaisePropertyChanged(() => Platforms);
 			}
 		}
 
 #if MONOTOUCH
 		public MonoTouch.UIKit.UIViewController ViewController { get;set; }
 #endif
+
+		public ICommand LoginCommand
+		{
+			get { return new MvxRelayCommand<LoginPlatform>(Login); }
+		}
 
 		public void Login(LoginPlatform platform)
 		{

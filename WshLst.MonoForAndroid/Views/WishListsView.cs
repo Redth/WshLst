@@ -27,14 +27,7 @@ namespace WshLst.MonoForAndroid.Views
 			SetContentView(Resource.Layout.Page_WishListsView);
 
 			_list = FindViewById<ListView>(Resource.Id.mvxList);
-
-			_list.ItemClick += (s, e) =>
-				{
-					var item = (MvxJavaContainer) _list.Adapter.GetItem(e.Position);
-
-					ViewModel.Select((WishList) item.Object);
-				};
-
+			
 			RegisterForContextMenu(_list);
 		}
 

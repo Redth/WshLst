@@ -10,7 +10,6 @@ namespace WshLst.MonoForAndroid.Views
 	[Activity(Label = "Share Wish List", Icon = "@drawable/icontransparent")]
 	public class ShareView : MvxBindingActivityView<ShareViewModel>
 	{
-		private Button _buttonCancel;
 		private Button _buttonSave;
 		private ListView _list;
 
@@ -28,9 +27,7 @@ namespace WshLst.MonoForAndroid.Views
 			SetContentView(Resource.Layout.Page_ShareView);
 
 			_buttonSave = FindViewById<Button>(Resource.Id.buttonSave);
-			_buttonCancel = FindViewById<Button>(Resource.Id.buttonCancel);
 			_list = FindViewById<ListView>(Resource.Id.mvxList);
-
 			_list.FastScrollEnabled = true;
 
 			_buttonSave.Click += (s, e) =>
@@ -63,15 +60,13 @@ namespace WshLst.MonoForAndroid.Views
 						this.ShowInformation("Email Setup", "Please setup your Email on the device before sharing your Wish List!", "OK");
 					}
 				};
-
-			_buttonCancel.Click += (s, e) => ViewModel.Cancel();
 		}
 
 		protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
 		{
 			base.OnActivityResult(requestCode, resultCode, data);
 
-			if (requestCode == 101)
+			if (requestCode == 101 && resultCode == Result.Ok)
 				ViewModel.Finished();
 		}
 	}

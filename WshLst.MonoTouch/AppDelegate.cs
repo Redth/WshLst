@@ -21,22 +21,15 @@ namespace WshLst.MonoTouch
 	{
 		// class-level declarations
 		UIWindow window;
-
-		//
-		// This method is invoked when the application has loaded and is ready to run. In this 
-		// method you should instantiate the window, load the UI into it and then make the window
-		// visible.
-		//
-		// You have 17 seconds to return from this method, or iOS will terminate your application.
-		//
-		public override bool FinishedLaunching (UIApplication app, NSDictionary options)
+			
+		public override bool FinishedLaunching(UIApplication app, NSDictionary options)
 		{
 			// create a new window instance based on the screen size
-			window = new UIWindow (UIScreen.MainScreen.Bounds);
+			window = new UIWindow(UIScreen.MainScreen.Bounds);
 
 			// initialize app for single screen iPhone display
 			var presenter = new MvxTouchViewPresenter(this, window);
-			var s = new Setup (this, presenter);
+			var s = new Setup(this, presenter);
 
 
 			//var setup = new Setup(this, presenter);
@@ -46,22 +39,22 @@ namespace WshLst.MonoTouch
 			var start = this.GetService<IMvxStartNavigation>();
 			start.Start();
 
-            var geo = this.GetService<WshLst.Core.Interfaces.IGeolocator>();
-            geo.StartTracking();
+			var geo = this.GetService<WshLst.Core.Interfaces.IGeolocator>();
+			geo.StartTracking();
 		
 			// make the window visible
-			window.MakeKeyAndVisible ();
+			window.MakeKeyAndVisible();
 			
 			return true;
 		}
 
-        public override void WillTerminate(UIApplication application)
-        {
-            var geo = this.GetService<WshLst.Core.Interfaces.IGeolocator>();
-            geo.StopTracking();
+		public override void WillTerminate(UIApplication application)
+		{
+			var geo = this.GetService<WshLst.Core.Interfaces.IGeolocator>();
+			geo.StopTracking();
 
-            base.WillTerminate(application);
-        }
+			base.WillTerminate(application);
+		}
 	}
 }
 

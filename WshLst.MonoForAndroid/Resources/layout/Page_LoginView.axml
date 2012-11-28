@@ -16,6 +16,6 @@
         android:layout_height="fill_parent"
         android:orientation="vertical"
         local:MvxItemTemplate="@layout/listitem_login"
-        local:MvxBind="{'ItemsSource':{'Path':'Platforms'}}"
+        local:MvxBind="{'ItemsSource':{'Path':'Platforms'},'ItemClick':{'Path':'LoginCommand'}}"
       />
 </FrameLayout>

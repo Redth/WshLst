@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Cirrious.MvvmCross.Commands;
 using Cirrious.MvvmCross.ExtensionMethods;
 using Microsoft.WindowsAzure.MobileServices;
 using WshLst.Core.Interfaces;
@@ -42,7 +44,7 @@ namespace WshLst.Core.ViewModels
 							if (!string.IsNullOrEmpty(nearestPlaceName) && string.IsNullOrEmpty(_entry.Store))
 							{
 								_entry.Store = nearestPlaceName;
-								RaisePropertyChanged("Entry");
+								RaisePropertyChanged(() => Entry);
 							}
 						});
 				}
@@ -55,7 +57,7 @@ namespace WshLst.Core.ViewModels
 			set
 			{
 				_wishList = value;
-				RaisePropertyChanged("WishList");
+				RaisePropertyChanged(() => WishList);
 			}
 		}
 
@@ -65,7 +67,7 @@ namespace WshLst.Core.ViewModels
 			set
 			{
 				_entry = value;
-				RaisePropertyChanged("Entry");
+				RaisePropertyChanged(() => Entry);
 			}
 		}
 
@@ -75,7 +77,7 @@ namespace WshLst.Core.ViewModels
 			set
 			{
 				_entryImage = value;
-				RaisePropertyChanged("EntryImage");
+				RaisePropertyChanged(() => EntryImage);
 			}
 		}
 
@@ -89,15 +91,20 @@ namespace WshLst.Core.ViewModels
 		public void AddPhoto(string base64Image)
 		{
 			_entryImage.ImageBase64 = base64Image;
-			RaisePropertyChanged("EntryImage");
-			RaisePropertyChanged("HasImage");
+			RaisePropertyChanged(() => EntryImage);
+			RaisePropertyChanged(() => HasImage);
 		}
 
 		public void RemovePhoto()
 		{
 			_entryImage.ImageBase64 = string.Empty;
-			RaisePropertyChanged("EntryImage");
-			RaisePropertyChanged("HasImage");
+			RaisePropertyChanged(() => EntryImage);
+			RaisePropertyChanged(() => HasImage);
+		}
+
+		public ICommand ScanCommand
+		{
+			get { return new MvxRelayCommand(Scan); }
 		}
 
 		public void Scan()
@@ -112,16 +119,16 @@ namespace WshLst.Core.ViewModels
 						if (t.Result != null && !string.IsNullOrEmpty(t.Result.Text))
 						{
 							_entry.Upc = t.Result.Text;
-							RaisePropertyChanged("Entry");
+							RaisePropertyChanged(() => Entry);
 
 							IsLoading = true;
 
 							scanner.LookupProduct(t.Result.Text, product =>
 								{
 									if (product != null && !string.IsNullOrEmpty(product.Name) && string.IsNullOrEmpty(_entry.Name))
-									{
+									{ 
 										_entry.Name = product.Name;
-										RaisePropertyChanged("Entry");
+										RaisePropertyChanged(() => Entry);
 									}
 
 									IsLoading = false;
@@ -131,6 +138,11 @@ namespace WshLst.Core.ViewModels
 				});
 		}
 
+		public ICommand SaveCommand
+		{
+			get { return new MvxRelayCommand(Save); }
+		}
+	
 		public void Save()
 		{
 			IsLoading = true;
@@ -207,9 +219,19 @@ namespace WshLst.Core.ViewModels
 				App.Azure.GetTable<Entry>().UpdateAsync(Entry).ContinueWith(continuation);
 		}
 
+		public ICommand CancelCommand
+		{
+			get { return new MvxRelayCommand(Cancel); }
+		}
+
 		public void Cancel()
 		{
 			RequestClose(this);
+		}
+
+		public ICommand DeleteCommand
+		{
+			get { return new MvxRelayCommand(Delete); }
 		}
 
 		public void Delete()

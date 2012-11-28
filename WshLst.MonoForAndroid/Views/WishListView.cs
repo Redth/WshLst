@@ -28,13 +28,6 @@ namespace WshLst.MonoForAndroid.Views
 
 			_list = FindViewById<ListView>(Resource.Id.mvxList);
 
-			_list.ItemClick += (s, e) =>
-				{
-					var item = (MvxJavaContainer) _list.Adapter.GetItem(e.Position);
-
-					ViewModel.Select((Entry) item.Object);
-				};
-
 			RegisterForContextMenu(_list);
 
 			ViewModel.PropertyChanged += (s, e) =>

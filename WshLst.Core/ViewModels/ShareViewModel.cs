@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
+using Cirrious.MvvmCross.Commands;
 using Cirrious.MvvmCross.ExtensionMethods;
 using Xamarin.Contacts;
 
@@ -25,7 +27,7 @@ namespace WshLst.Core.ViewModels
 			set
 			{
 				_contacts = value;
-				RaisePropertyChanged("Contacts");
+				RaisePropertyChanged(() => Contacts);
 			}
 		}
 
@@ -53,12 +55,22 @@ namespace WshLst.Core.ViewModels
 						             IsSelected = false
 					             }).ToList();
 
-			RaisePropertyChanged("Contacts");
+			RaisePropertyChanged(() => Contacts);
+		}
+
+		public ICommand CancelCommand
+		{
+			get { return new MvxRelayCommand(Cancel); }
 		}
 
 		public void Cancel()
 		{
 			RequestClose(this);
+		}
+		
+		public ICommand FinishedCommand
+		{
+			get { return new MvxRelayCommand(Finished); }
 		}
 
 		public void Finished()
@@ -80,7 +92,6 @@ namespace WshLst.Core.ViewModels
 		{
 			return "I've shared a Wish List with you!";
 		}
-
 
 		public string GetEmailBody()
 		{

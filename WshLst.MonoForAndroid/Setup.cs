@@ -36,6 +36,8 @@ namespace WshLst.MonoForAndroid
 		public class Converters
 		{
 			public readonly MvxVisibilityConverter Visibility = new MvxVisibilityConverter();
+			public readonly MvxInvertedVisibilityConverter InvertedVisibility = new MvxInvertedVisibilityConverter(); 	 	
+            public readonly Base64ToBitmapDrawableConverter Base64ImageConverter = new Base64ToBitmapDrawableConverter();
 		}
 	}
 }

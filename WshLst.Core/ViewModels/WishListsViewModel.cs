@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Cirrious.MvvmCross.Commands;
 using Cirrious.MvvmCross.ExtensionMethods;
 using WshLst.Core.Interfaces;
 using WshLst.Core.Models;
@@ -21,8 +23,13 @@ namespace WshLst.Core.ViewModels
 			set
 			{
 				_lists = value;
-				RaisePropertyChanged("Lists");
+				RaisePropertyChanged(() => Lists);
 			}
+		}
+
+		public ICommand AddCommand
+		{
+			get { return new MvxRelayCommand(Add); }
 		}
 
 		public void Add()
@@ -30,14 +37,29 @@ namespace WshLst.Core.ViewModels
 			RequestNavigate<EditWishListViewModel>();
 		}
 
+		public ICommand SelectCommand
+		{
+			get { return new MvxRelayCommand<WishList>(Select); }
+		}
+
 		public void Select(WishList item)
 		{
 			RequestNavigate<WishListViewModel>(new {listId = item.Id});
 		}
 
+		public ICommand EditCommand
+		{
+			get { return new MvxRelayCommand<WishList>(Edit); }
+		}
+		
 		public void Edit(WishList item)
 		{
 			RequestNavigate<EditWishListViewModel>(new {listId = item.Id});
+		}
+
+		public ICommand DeleteCommand
+		{
+			get { return new MvxRelayCommand<WishList>(Delete); }
 		}
 
 		public void Delete(WishList item)
@@ -57,7 +79,7 @@ namespace WshLst.Core.ViewModels
 					else
 					{
 						_lists.Remove(item);
-						RaisePropertyChanged("Lists");
+						RaisePropertyChanged(() => Lists);
 					}
 				});
 		}
@@ -77,7 +99,7 @@ namespace WshLst.Core.ViewModels
 					{
 						_lists = new List<WishList>();
 						_lists.AddRange(t.Result);
-						RaisePropertyChanged("Lists");
+						RaisePropertyChanged(() => Lists);
 					}
 					else
 						_lists = new List<WishList>();

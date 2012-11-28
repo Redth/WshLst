@@ -14,7 +14,7 @@ namespace WshLst.Core.ViewModels
 			set
 			{
 				_isLoading = value;
-				RaisePropertyChanged("IsLoading");
+				RaisePropertyChanged(() => IsLoading);
 			}
 		}
 

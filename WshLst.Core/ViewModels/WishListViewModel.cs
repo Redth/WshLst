@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Windows.Input;
+using Cirrious.MvvmCross.Commands;
 using WshLst.Core.Models;
 
 namespace WshLst.Core.ViewModels
@@ -41,9 +43,19 @@ namespace WshLst.Core.ViewModels
 			RequestNavigate<EditEntryViewModel>(new {listId = WishList.Id, entryId = string.Empty});
 		}
 
+		public ICommand SelectCommand
+		{
+			get { return new MvxRelayCommand<Entry>(Select); }
+		}
+
 		public void Select(Entry entry)
 		{
 			RequestNavigate<EntryViewModel>(new {listId = WishList.Id, entryId = entry.Id});
+		}
+
+		public ICommand EditCommand
+		{
+			get { return new MvxRelayCommand<Entry>(Edit); }
 		}
 
 		public void Edit(Entry entry)
@@ -51,9 +63,19 @@ namespace WshLst.Core.ViewModels
 			RequestNavigate<EditEntryViewModel>(new {listId = WishList.Id, entryId = entry.Id});
 		}
 
-		public void Edit()
+		public ICommand EditWishListCommand
+		{
+			get { return new MvxRelayCommand(EditWishList); }
+		}
+
+		public void EditWishList()
 		{
 			RequestNavigate<EditWishListViewModel>(new {listId = WishList.Id});
+		}
+
+		public ICommand DeleteCommand
+		{
+			get { return new MvxRelayCommand<Entry>(Delete); }
 		}
 
 		public void Delete(Entry entry)
@@ -118,6 +140,10 @@ namespace WshLst.Core.ViewModels
 				});
 		}
 
+		public ICommand ShareCommand
+		{
+			get { return new MvxRelayCommand(Share); }
+		}
 
 		public void Share()
 		{

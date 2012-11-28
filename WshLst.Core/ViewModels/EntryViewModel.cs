@@ -26,7 +26,7 @@ namespace WshLst.Core.ViewModels
 			set
 			{
 				_wishList = value;
-				RaisePropertyChanged("WishList");
+				RaisePropertyChanged(() => WishList);
 			}
 		}
 
@@ -36,7 +36,7 @@ namespace WshLst.Core.ViewModels
 			set
 			{
 				_entry = value;
-				RaisePropertyChanged("Entry");
+				RaisePropertyChanged(() => Entry);
 			}
 		}
 
@@ -46,7 +46,7 @@ namespace WshLst.Core.ViewModels
 			set
 			{
 				_entryImage = value;
-				RaisePropertyChanged("EntryImage");
+				RaisePropertyChanged(() => EntryImage);
 			}
 		}
 
@@ -93,7 +93,7 @@ namespace WshLst.Core.ViewModels
 					if (t.Status == TaskStatus.RanToCompletion)
 					{
 						_entry = t.Result;
-						RaisePropertyChanged("Entry");
+						RaisePropertyChanged(() => Entry);
 
 						if (!string.IsNullOrEmpty(_entry.ImageGuid))
 						{
@@ -107,8 +107,8 @@ namespace WshLst.Core.ViewModels
 									   if (t2.Status == TaskStatus.RanToCompletion && t2.Result.Count > 0)
 									   {
 										   _entryImage = t2.Result[0];
-										   RaisePropertyChanged("EntryImage");
-										   RaisePropertyChanged("HasImage");
+										   RaisePropertyChanged(() => EntryImage);
+										   RaisePropertyChanged(() => HasImage);
 									   }
 
 									   IsLoading = false;

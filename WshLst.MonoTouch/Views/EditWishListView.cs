@@ -74,7 +74,7 @@ namespace WshLst.MonoTouch
 				{
 					this.InvokeOnMainThread(() => {
 						loadingView = new LoadingHUDView("Loading...", "");
-						this.TableView.AddSubview(loadingView);
+						this.View.AddSubview(loadingView);
 						loadingView.StartAnimating();
 					});
 				}

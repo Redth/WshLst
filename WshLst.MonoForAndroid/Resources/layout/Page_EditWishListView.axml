@@ -57,12 +57,14 @@
 					android:layout_width="wrap_content"
 					android:layout_height="fill_parent"
 					android:id="@+id/buttonCancel"
+					local:MvxBind="{'Click':{'Path':'CancelCommand'}}"
 					android:layout_weight="0.5" />
 			<Button
 					android:text="Save"
 					android:layout_width="wrap_content"
 					android:layout_height="fill_parent"
 					android:id="@+id/buttonSave"
+					local:MvxBind="{'Click':{'Path':'SaveCommand'}}"
 					android:layout_weight="0.5" />
 		</LinearLayout>
 	</LinearLayout>

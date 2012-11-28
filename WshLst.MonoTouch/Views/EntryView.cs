@@ -100,7 +100,7 @@ namespace WshLst.MonoTouch
 				if (this.ViewModel.IsLoading && loadingView == null) {
 					this.InvokeOnMainThread (() => {
 						loadingView = new LoadingHUDView ("Loading...", "");
-						this.TableView.AddSubview (loadingView);
+						this.View.AddSubview (loadingView);
 						loadingView.StartAnimating ();
 					});
 				} else if (!this.ViewModel.IsLoading && this.loadingView != null) {

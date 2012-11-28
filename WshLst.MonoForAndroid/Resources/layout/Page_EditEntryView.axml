@@ -24,6 +24,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:id="@+id/buttonScanBarcode"
+				local:MvxBind="{'Click':{'Path':'ScanCommand'}}"
         android:layout_marginTop="20dp" />
 		<TextView
         android:text="What is it called?"
@@ -110,18 +111,21 @@
 							android:layout_height="wrap_content"
 							android:scaleType="fitCenter"
 							android:adjustViewBounds="true"
+							local:MvxBind="{'Visibility':{'Path':'HasImage','Converter':'Visibility'}}"
 							android:id="@+id/imagePhoto" />
 					<Button
 							android:text="Add Photo"
 							android:layout_width="fill_parent"
 							android:layout_height="wrap_content"
 							android:id="@+id/buttonAddPhoto"
+							local:MvxBind="{'Visibility':{'Path':'HasImage','Converter':'InvertedVisibility'}}"
 							android:textSize="16sp" />
 					<Button
 							android:text="Remove Photo"
 							android:layout_width="fill_parent"
 							android:layout_height="wrap_content"
 							android:id="@+id/buttonRemovePhoto"
+							local:MvxBind="{'Visibility':{'Path':'HasImage','Converter':'Visibility'}}"
 							android:textSize="12sp" />
 				</LinearLayout>
 			</TableRow>
@@ -154,12 +158,14 @@
 					android:layout_width="wrap_content"
 					android:layout_height="fill_parent"
 					android:id="@+id/buttonCancel"
+					local:MvxBind="{'Click':{'Path':'CancelCommand'}}"
 					android:layout_weight="0.5" />
 			<Button
 					android:text="Save"
 					android:layout_width="wrap_content"
 					android:layout_height="fill_parent"
 					android:id="@+id/buttonSave"
+					local:MvxBind="{'Click':{'Path':'SaveCommand'}}"
 					android:layout_weight="0.5" />
 		</LinearLayout>
 	</LinearLayout>

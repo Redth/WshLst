@@ -63,14 +63,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
-    <Folder Include="Converters\" />
     <Folder Include="Interfaces\" />
     <Folder Include="Models\" />
     <Folder Include="ViewModels\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <Compile Include="Converters\Converters.cs" />
     <Compile Include="Interfaces\IBarcodeScanner.cs" />
     <Compile Include="Interfaces\IErrorReporter.cs" />
     <Compile Include="Interfaces\IErrorSource.cs" />
