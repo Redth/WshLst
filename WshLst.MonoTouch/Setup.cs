@@ -9,15 +9,12 @@ using Cirrious.MvvmCross.Touch.Platform;
 
 namespace WshLst.MonoTouch
 {
-	public class Setup
-		: MvxTouchDialogBindingSetup
+	public class Setup : MvxTouchDialogBindingSetup
 	{
 		public Setup(MvxApplicationDelegate applicationDelegate, IMvxTouchViewPresenter presenter)
 			: base(applicationDelegate, presenter)
 		{
 		}
-
-		#region Overrides of MvxBaseSetup
 
 		protected override MvxApplication CreateApp()
 		{
@@ -29,8 +26,7 @@ namespace WshLst.MonoTouch
 		{
 			public readonly MvxVisibilityConverter Visibility = new MvxVisibilityConverter();
 			public readonly MvxInvertedVisibilityConverter InvertedVisibility = new MvxInvertedVisibilityConverter();
-
-			public readonly Base64ToUIImageConverter Base64ToUIImage = new Base64ToUIImageConverter (); 
+			public readonly Base64ToUIImageConverter Base64ToUIImage = new Base64ToUIImageConverter(); 
 		}
 
 		protected override IEnumerable<Type> ValueConverterHolders
@@ -55,7 +51,5 @@ namespace WshLst.MonoTouch
 			registry.AddConventionalPlugin<Cirrious.MvvmCross.Plugins.File.Touch.Plugin>();
 			base.AddPluginsLoaders(registry);
 		}
-
-		#endregion
 	}
 }

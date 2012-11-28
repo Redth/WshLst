@@ -1,72 +1,62 @@
-
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-
-using MonoTouch.Foundation;
-using MonoTouch.UIKit;
-
 using Cirrious.MvvmCross.Binding.Touch.ExtensionMethods;
 using Cirrious.MvvmCross.Binding.Touch.Views;
 using Cirrious.MvvmCross.Views;
+using MonoTouch.Foundation;
+using MonoTouch.UIKit;
 using WshLst.Core.Models;
 using WshLst.Core.ViewModels;
 
 namespace WshLst.MonoTouch
 {
-	public class LoginView : MvxBindingTouchTableViewController<LoginViewModel>
+	public class LoginView : BaseBindingTableViewController<LoginViewModel>
 	{
-		public LoginView (MvxShowViewModelRequest request) : base (request)
+		public LoginView(MvxShowViewModelRequest request) : base (request)
 		{
 		}
 				
-		public override void ViewDidLoad ()
+		public override void ViewDidLoad()
 		{
-			base.ViewDidLoad ();
+			base.ViewDidLoad();
+						
+			Title = "Wsh Lst Login";
 
-			
-			this.Title = "Wsh Lst Login";
+			var source = new MvxBindableTableViewSource(TableView, UITableViewCellStyle.Default, new NSString("LoginView"),
+				"{'TitleText':{'Path':'Name'}}", UITableViewCellAccessory.DisclosureIndicator);
 
-			var source = new MvxBindableTableViewSource (
-				this.TableView,
-				UITableViewCellStyle.Default,
-				new NSString ("LoginView"),
-				"{'TitleText':{'Path':'Name'}}",
-				UITableViewCellAccessory.DisclosureIndicator);
-
-
-			this.AddBindings (new Dictionary<object, string> () { { source, "{'ItemsSource':{'Path':'Platforms'}}" } });
+			this.AddBindings(new Dictionary<object, string>() { { source, "{'ItemsSource':{'Path':'Platforms'}}" } });
 
 			source.SelectionChanged += (sender, e) => 
-			{
-				var path = this.TableView.IndexPathForSelectedRow;
-				var platform = this.ViewModel.Platforms[path.Row];
+				{
+					var path = TableView.IndexPathForSelectedRow;
+					var platform = ViewModel.Platforms [path.Row];
 
-				this.InvokeOnMainThread(() => this.TableView.DeselectRow(path, true));
+					InvokeOnMainThread(() => TableView.DeselectRow(path, true));
 
-				this.ViewModel.Login(platform);
-			};
+					ViewModel.Login(platform);
+				};
 
-            this.NavigationController.ToolbarHidden = false;
+			NavigationController.ToolbarHidden = false;
 
-			this.TableView.Source = source;
-			this.TableView.ReloadData ();
+			TableView.Source = source;
+			TableView.ReloadData();
 
-			this.ViewModel.ViewController = this;
-
-			this.ViewModel.CheckLogin ();
+			ViewModel.ViewController = this;
+			ViewModel.CheckLogin();
 		}
 
-		public override void ViewDidAppear (bool animated)
+		public override void ViewDidAppear(bool animated)
 		{
-			base.ViewDidAppear (animated);
+			base.ViewDidAppear(animated);
 
-            if (WshLst.Core.App.IsLaunch)
-            {
-                WshLst.Core.App.IsLaunch = false;
+			if (WshLst.Core.App.IsLaunch)
+			{
+				WshLst.Core.App.IsLaunch = false;
 
-                this.ViewModel.CheckLogin();
-            }
+				ViewModel.CheckLogin();
+			}
 		}
 	}
 }

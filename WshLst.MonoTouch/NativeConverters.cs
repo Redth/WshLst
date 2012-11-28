@@ -13,15 +13,13 @@ using MonoTouch.UIKit;
 
 namespace WshLst.MonoTouch
 {
-	public class Base64ToUIImageConverter : MvxBaseValueConverter  
+	public class Base64ToUIImageConverter : MvxBaseValueConverter
 	{
 		public override object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
 		{
-			string base64 = string.Empty;
-
 			var img = (UIImage)value;
 
-			return System.Convert.ToBase64String (img.AsJPEG ().ToArray());
+			return System.Convert.ToBase64String(img.AsJPEG().ToArray());
 		}
 
 		public override object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

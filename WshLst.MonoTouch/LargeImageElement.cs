@@ -1,27 +1,25 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-
-using MonoTouch.Foundation;
-using MonoTouch.CoreFoundation;
-using MonoTouch.UIKit;
-
 using CrossUI.Touch.Dialog.Elements;
+using MonoTouch.CoreFoundation;
+using MonoTouch.Foundation;
+using MonoTouch.UIKit;
 
 namespace WshLst.MonoTouch
 {
 	public class LargeImageElement : Element, IElementSizing
 	{
-		public LargeImageElement () : base(string.Empty)
+		public LargeImageElement() : base(string.Empty)
 		{
 		}
 
 		UIImage image = null;
 
-		public UIImage Image 
+		public UIImage Image
 		{ 
 			get { return image; }
-			set 
+			set
 			{ 
 				image = value;
 	
@@ -31,29 +29,26 @@ namespace WshLst.MonoTouch
 		}
 
 		UITableViewCell cellImg;
-
 		UIImageView ivImg;
-
 		float hBorder = 15f;
 		float vBorder = 5f;
-
 		float cellHeight = 300f;
 
-		protected override UITableViewCell GetCellImpl (UITableView tv)
+		protected override UITableViewCell GetCellImpl(UITableView tv)
 		{
-			if (cellImg == null) 
-            {
+			if (cellImg == null)
+			{
 				var cWidth = (tv.Bounds.Width - (2 * hBorder));
                 				
-				cellImg = new UITableViewCell (UITableViewCellStyle.Default, "LargeImagesCell");
+				cellImg = new UITableViewCell(UITableViewCellStyle.Default, "LargeImagesCell");
 			
-				ivImg = new UIImageView ();
+				ivImg = new UIImageView();
 				ivImg.Frame = new RectangleF(hBorder, vBorder, cWidth, cellHeight - (vBorder * 2));
 				ivImg.ContentMode = UIViewContentMode.ScaleAspectFit;
 
 				ivImg.Tag = 101;
 
-				cellImg.Add (ivImg);
+				cellImg.Add(ivImg);
 			} 
 
 			ivImg.Image = this.Image;
@@ -61,12 +56,10 @@ namespace WshLst.MonoTouch
 			return cellImg;
 		}
 	
-		#region IElementSizing implementation
-		public float GetHeight (UITableView tableView, NSIndexPath indexPath)
+		public float GetHeight(UITableView tableView, NSIndexPath indexPath)
 		{
 			return cellHeight;
 		}
-		#endregion
 	}
 }
 

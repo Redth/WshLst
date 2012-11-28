@@ -167,6 +167,8 @@
     <Compile Include="Views\WishListsView.cs" />
     <Compile Include="Views\ShareView.cs" />
     <Compile Include="Views\EditWishListView.cs" />
+    <Compile Include="Views\BaseDialogViewController.cs" />
+    <Compile Include="Views\BaseBindingTableViewController.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>

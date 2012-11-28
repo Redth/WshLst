@@ -68,31 +68,6 @@ namespace WshLst.Views
 			catch (Exception)
 			{
 			}
-
-			/*if (mediaFile != null && !string.IsNullOrEmpty(mediaFile.Path))
-			{
-				Dispatcher.BeginInvoke(() =>
-					{
-						ViewModel.AddPhoto(mediaFile.GetStream());
-						_photo = new BitmapImage();
-						_photo.SetSource(mediaFile.GetStream());
-
-
-						var photoBase64 = string.Empty;
-						var wbmp = new WriteableBitmap(_photo);
-
-						using (var ms = new MemoryStream())
-						{
-							wbmp.SaveJpeg(ms, 640, 480, 0, 60);
-							photoBase64 = Convert.ToBase64String(ms.ToArray());
-						}
-
-						ViewModel.AddPhoto(photoBase64);
-						
-						//Clean up!
-						mediaFile.Dispose();
-					});
-			}*/
 		}
 
 		private void removePhoto_Click(object sender, RoutedEventArgs e)

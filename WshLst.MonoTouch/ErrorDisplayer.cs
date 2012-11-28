@@ -5,8 +5,7 @@ using WshLst.Core.Interfaces;
 
 namespace WshLst.MonoTouch
 {
-	public class ErrorDisplayer
-		: IMvxServiceConsumer<IErrorSource>
+	public class ErrorDisplayer : IMvxServiceConsumer<IErrorSource>
 	{
 		public ErrorDisplayer()
 		{

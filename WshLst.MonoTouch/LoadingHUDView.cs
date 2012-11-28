@@ -28,55 +28,64 @@
  OTHER DEALINGS IN THE SOFTWARE.
  
  */
-
 using MonoTouch.UIKit;
 using System.Drawing;
 using MonoTouch.CoreGraphics;
 using MonoTouch.Foundation;
 using System;
 
-namespace WshLst.MonoTouch {
-	public class LoadingHUDView : UIView {
+namespace WshLst.MonoTouch
+{
+	public class LoadingHUDView : UIView
+	{
 
 		public static int WIDTH_MARGIN = 20;
 		public static int HEIGHT_MARGIN = 20;
-
 		string _title, _message;
 		UIActivityIndicatorView _activity;
 		bool _hidden;
 		UIFont titleFont = UIFont.BoldSystemFontOfSize(16);
 		UIFont messageFont = UIFont.SystemFontOfSize(13);
 
-		public string Title {
+		public string Title
+		{
 			get { return _title; }
-			set {
+			set
+			{
 				_title = value; 
 				this.SetNeedsDisplay();
 			}
 		}
 
-		public string Message {
+		public string Message
+		{
 			get { return _message; }
-			set {
+			set
+			{
 				_message = value; 
 				this.SetNeedsDisplay();
 			}
 		}
 
-		public LoadingHUDView(string title, string message) {
+		public LoadingHUDView(string title, string message)
+		{
 			Title = title;
 			Message = message;
 			_activity = new UIActivityIndicatorView(UIActivityIndicatorViewStyle.White);
 			_hidden = true;
 			this.BackgroundColor = UIColor.Clear;
-			Frame = new RectangleF(0,0,320,480);
+			Frame = new RectangleF(0, 0, 320, 480);
 			this.AddSubview(_activity);
 		}
 
-		public LoadingHUDView(string title) : this(title, null) {}
+		public LoadingHUDView(string title) : this(title, null)
+		{
+		}
 
-		public void StartAnimating() {
-			if (!_hidden) return;
+		public void StartAnimating()
+		{
+			if (!_hidden)
+				return;
 
 			_hidden = false;
 			this.SetNeedsDisplay();
@@ -84,8 +93,10 @@ namespace WshLst.MonoTouch {
 			_activity.StartAnimating();
 		}
 
-		public void StopAnimating() {
-			if (_hidden) return;
+		public void StopAnimating()
+		{
+			if (_hidden)
+				return;
 
 			_hidden = true;
 			this.SetNeedsDisplay();
@@ -93,8 +104,8 @@ namespace WshLst.MonoTouch {
 			_activity.StopAnimating();
 		}
 
-
-		protected void AdjustHeight() {
+		protected void AdjustHeight()
+		{
 			SizeF titleSize = calculateHeightOfTextForWidth(_title, titleFont, 200, UILineBreakMode.TailTruncation);
 			SizeF messageSize = calculateHeightOfTextForWidth(_message, messageFont, 200, UILineBreakMode.WordWrap);
 
@@ -105,24 +116,27 @@ namespace WshLst.MonoTouch {
 			this.Frame = r;
 		}
 
-		public override void Draw (RectangleF rect)
+		public override void Draw(RectangleF rect)
 		{
-			if (_hidden) return;
+			if (_hidden)
+				return;
 
 			int width, rWidth, rHeight, x;
 			SizeF titleSize = calculateHeightOfTextForWidth(_title, titleFont, 200, UILineBreakMode.TailTruncation);
 			SizeF messageSize = calculateHeightOfTextForWidth(_message, messageFont, 200, UILineBreakMode.WordWrap);
 
-			if (_title.Length<1) titleSize.Height = 0;
-			if (_message==null || _message.Length<1) messageSize.Height = 0;
+			if (_title.Length < 1)
+				titleSize.Height = 0;
+			if (_message == null || _message.Length < 1)
+				messageSize.Height = 0;
 
-			rHeight = (int)(titleSize.Height+HEIGHT_MARGIN*2 + _activity.Frame.Size.Height);
-			rHeight += (int)(messageSize.Height>0 ? messageSize.Height + 10 : 0);
+			rHeight = (int)(titleSize.Height + HEIGHT_MARGIN * 2 + _activity.Frame.Size.Height);
+			rHeight += (int)(messageSize.Height > 0 ? messageSize.Height + 10 : 0);
 			rWidth = width = (int)Math.Max(titleSize.Width, messageSize.Width);
 			rWidth += WIDTH_MARGIN * 2;
-			x = (320-rWidth) /2;
+			x = (320 - rWidth) / 2;
 
-			_activity.Center = new PointF(320/2, HEIGHT_MARGIN + 20 + _activity.Frame.Size.Height/2);
+			_activity.Center = new PointF(320 / 2, HEIGHT_MARGIN + 20 + _activity.Frame.Size.Height / 2);
 
 			// Rounded rectangle
 			RectangleF areaRect = new RectangleF(x, HEIGHT_MARGIN, rWidth, rHeight);
@@ -130,38 +144,38 @@ namespace WshLst.MonoTouch {
 
 			// Title
 			UIColor.White.SetColor();
-			var textRect = new RectangleF(x+WIDTH_MARGIN, _activity.Frame.Size.Height + 25 + HEIGHT_MARGIN,
+			var textRect = new RectangleF(x + WIDTH_MARGIN, _activity.Frame.Size.Height + 25 + HEIGHT_MARGIN,
 			                              width, titleSize.Height);
 			SizeF titleDrawSize = this.DrawString(_title, textRect, titleFont, UILineBreakMode.TailTruncation, UITextAlignment.Center);
 
 			// Description
 			UIColor.White.SetColor();
-			textRect.Y += titleDrawSize.Height+10;
+			textRect.Y += titleDrawSize.Height + 10;
 			textRect = new RectangleF(textRect.Location, new SizeF(textRect.Size.Width, messageSize.Height));
 
-			if (_message!=null)
+			if (_message != null)
 				this.DrawString(_message, textRect, messageFont, UILineBreakMode.WordWrap, UITextAlignment.Center);
 		}
 
-		protected SizeF calculateHeightOfTextForWidth(string text, UIFont font, float width, UILineBreakMode lineBreakMode){
-			return text==null? new SizeF(0, 0) : this.StringSize(text, font, new SizeF(width, 300), lineBreakMode);
+		protected SizeF calculateHeightOfTextForWidth(string text, UIFont font, float width, UILineBreakMode lineBreakMode)
+		{
+			return text == null ? new SizeF(0, 0) : this.StringSize(text, font, new SizeF(width, 300), lineBreakMode);
 		}
-
-
 	}
 
-	public static class UIViewExtensions {
-
-		public static void DrawRoundRectangle(this UIView view, RectangleF rrect, float radius, UIColor color) {
+	public static class UIViewExtensions
+	{
+		public static void DrawRoundRectangle(this UIView view, RectangleF rrect, float radius, UIColor color)
+		{
 			var context = UIGraphics.GetCurrentContext();
 
 			color.SetColor();
 
 			float minx = rrect.Left;
-			float midx = rrect.Left + (rrect.Width)/2;
+			float midx = rrect.Left + (rrect.Width) / 2;
 			float maxx = rrect.Right;
 			float miny = rrect.Top;
-			float midy = (rrect.Y+rrect.Size.Width)/2;
+			float midy = (rrect.Y + rrect.Size.Width) / 2;
 			float maxy = rrect.Bottom;
 
 			context.MoveTo(minx, midy);
@@ -173,21 +187,21 @@ namespace WshLst.MonoTouch {
 			context.DrawPath(CGPathDrawingMode.Fill); // test others?
 		}
 		
-		public static void FillRoundedRectangle(this UIView view, RectangleF rect, float radius, UIColor color) {
-			
+		public static void FillRoundedRectangle(this UIView view, RectangleF rect, float radius, UIColor color)
+		{
 			//UIGraphics.BeginImageContext (image.Size);
 			float imgWidth = rect.Width;
 			float imgHeight = rect.Height;
 			
-			var c = UIGraphics.GetCurrentContext ();
+			var c = UIGraphics.GetCurrentContext();
 			
-			c.BeginPath ();
-			c.MoveTo (imgWidth, imgHeight/2);
-			c.AddArcToPoint (imgWidth, imgHeight, imgWidth/2, imgHeight, radius);
-			c.AddArcToPoint (0, imgHeight, 0, imgHeight/2, radius);
-			c.AddArcToPoint (0, 0, imgWidth/2, 0, radius);
-			c.AddArcToPoint (imgWidth, 0, imgWidth, imgHeight/2, radius);
-			c.ClosePath ();
+			c.BeginPath();
+			c.MoveTo(imgWidth, imgHeight / 2);
+			c.AddArcToPoint(imgWidth, imgHeight, imgWidth / 2, imgHeight, radius);
+			c.AddArcToPoint(0, imgHeight, 0, imgHeight / 2, radius);
+			c.AddArcToPoint(0, 0, imgWidth / 2, 0, radius);
+			c.AddArcToPoint(imgWidth, 0, imgWidth, imgHeight / 2, radius);
+			c.ClosePath();
 			//c.Clip ();
 			
 			c.SetFillColor(1, 1, 1, 1);
