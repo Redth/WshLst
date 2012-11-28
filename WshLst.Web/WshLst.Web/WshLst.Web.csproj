@@ -110,6 +110,9 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\WshLst.Core\Config.cs">
+      <Link>Config.cs</Link>
+    </Compile>
     <Compile Include="..\..\WshLst.Core\Models\Entry.cs">
       <Link>Models\Entry.cs</Link>
     </Compile>

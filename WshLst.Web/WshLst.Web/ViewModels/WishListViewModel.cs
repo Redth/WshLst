@@ -13,7 +13,7 @@ namespace WshLst.Web.ViewModels
 	public class WishListViewModel
 	{
 		HttpClient http;
-    string azureMobileServiceUrl = "";
+		string azureMobileServiceUrl = WshLst.Core.Config.AZURE_MOBILE_SERVICE_URL;
     
 		public WishListViewModel(string wishListGuid)
 		{
@@ -23,13 +23,9 @@ namespace WshLst.Web.ViewModels
 			this.Entries = new List<Entry>();
 
 			this.EntryImages = new Dictionary<string, EntryImage>();
-
-      //TODO: Load key and url from config.json
-      var azureMobileServiceAppKey = "";
-      azureMobileServiceUrl = "";
-      
+			      
 			http = new HttpClient();
-			http.DefaultRequestHeaders.Add("X-ZUMO-APPLICATION", azureMobileServiceAppKey);
+			http.DefaultRequestHeaders.Add("X-ZUMO-APPLICATION", WshLst.Core.Config.AZURE_MOBILE_SERVICE_APPKEY);
 			http.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
 		}

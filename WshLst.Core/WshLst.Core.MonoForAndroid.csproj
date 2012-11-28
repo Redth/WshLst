@@ -82,6 +82,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="Config.cs" />
     <Compile Include="Converters\Converters.cs" />
     <Compile Include="Interfaces\IBarcodeScanner.cs" />
     <Compile Include="Interfaces\IErrorReporter.cs" />
