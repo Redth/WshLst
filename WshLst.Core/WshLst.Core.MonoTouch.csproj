@@ -98,5 +98,6 @@
     <Compile Include="MediaFileApplicationObject.cs" />
     <Compile Include="Interfaces\IMediaFileSource.cs" />
     <Compile Include="ViewModels\EditWishListViewModel.cs" />
+    <Compile Include="Config.cs" />
   </ItemGroup>
 </Project>
