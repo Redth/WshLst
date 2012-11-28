@@ -16,8 +16,6 @@ namespace WshLst.Core
 		{
 		}
 
-		private const string SCANDIT_API_KEY = "wsWII25QpvSvPOZ2cpEwr-w3fed5TiKKbxeNp9AwWr5";
-
 		public Task<Result> Scan()
 		{
 #if MONOANDROID
@@ -51,7 +49,7 @@ namespace WshLst.Core
 			try
 			{
 				wc.DownloadStringAsync(
-					new Uri(string.Format("https://api.scandit.com/v1/products/{0}?key={1}", upc, SCANDIT_API_KEY)));
+					new Uri(string.Format("https://api.scandit.com/v1/products/{0}?key={1}", upc, Config.SCANDIT_API_KEY)));
 			}
 			catch
 			{

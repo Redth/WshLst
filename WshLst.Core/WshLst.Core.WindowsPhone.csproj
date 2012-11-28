@@ -117,7 +117,6 @@
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BarcodeApplicationObject.cs" />
     <Compile Include="Config.cs" />
-    <Compile Include="Converters\Converters.cs" />
     <Compile Include="ErrorApplicationObject.cs" />
     <Compile Include="GeolocatorApplicationObject.cs" />
     <Compile Include="Interfaces\IBarcodeScanner.cs" />
