@@ -7,6 +7,8 @@ Wsh Lst is an open source Wish List app, specifically designed to enter the firs
  
 ![Wshlst Banner](https://raw.github.com/Redth/WshLst/master/WshLst-Banner.png)
 
+[Watch an intro video about the project!](http://www.youtube.com/watch?v=HfaoAVTbwL8&feature=youtube_gdata "Watch an Intro Video about the Project!")
+
 ----------
 
 
