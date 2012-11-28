@@ -22,8 +22,6 @@ namespace WshLst.Core
 		public static bool IsLaunch = true;
 
 		public static MobileServiceClient Azure;
-
-		//public static Settings Settings;// = new Settings();
 				
 		public App()
 		{			
@@ -41,16 +39,13 @@ namespace WshLst.Core
 			geo.StartTracking();
 
 			this.RegisterServiceInstance<IGeolocator>(geo);
-
 			this.RegisterServiceInstance<IBarcodeScanner>(new BarcodeApplicatonObject());
 			
 		}
 
         public static void Logout()
         {
-            var azureMobileServiceUrl = "";
-            var azureMobileServiceAppKey = "";
-            Azure = new MobileServiceClient(azureMobileServiceUrl, azureMobileServiceAppKey);
+            Azure = new MobileServiceClient(Config.AZURE_MOBILE_SERVICE_URL, Config.AZURE_MOBILE_SERVICE_APPKEY);
         }
 	}
 }
