@@ -5,6 +5,7 @@ Wsh Lst is an open source Wish List app, specifically designed to enter the firs
 
 **IMPORTANT:** Before you attempt to compile and use the code, please read the ***GETTING STARTED*** section first!!!
  
+![Wshlst Banner](https://raw.github.com/Redth/WshLst/master/WshLst-Banner.png)
 
 ----------
 
