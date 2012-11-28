@@ -54,6 +54,10 @@ namespace WshLst.NativeConverters
 			var photo = new BitmapImage();
 
 			byte[] bytes = System.Convert.FromBase64String((string) value);
+
+			if (bytes == null || bytes.Length <= 0)
+				return photo;
+
 			using (var stream = new MemoryStream(bytes))
 			{
 				photo.SetSource(stream);

@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Cirrious.MvvmCross.Commands;
@@ -10,14 +10,14 @@ namespace WshLst.Core.ViewModels
 {
 	public class WishListsViewModel : BaseViewModel
 	{
-		private List<WishList> _lists;
+		private ObservableCollection<WishList> _lists;
 
 		public WishListsViewModel()
 		{
 			LoadLists();
 		}
 
-		public List<WishList> Lists
+		public ObservableCollection<WishList> Lists
 		{
 			get { return _lists; }
 			set
@@ -78,8 +78,9 @@ namespace WshLst.Core.ViewModels
 					}
 					else
 					{
-						_lists.Remove(item);
-						RaisePropertyChanged(() => Lists);
+						this.InvokeOnMainThread(() => _lists.Remove(item));
+						
+						RaisePropertyChanged("Lists");
 					}
 				});
 		}
@@ -95,14 +96,22 @@ namespace WshLst.Core.ViewModels
 				{
 					var ex = t.Exception;
 
-					if (t.Status == TaskStatus.RanToCompletion)
-					{
-						_lists = new List<WishList>();
-						_lists.AddRange(t.Result);
-						RaisePropertyChanged(() => Lists);
-					}
-					else
-						_lists = new List<WishList>();
+					this.InvokeOnMainThread(() =>
+						{
+							if (_lists == null)
+								_lists = new ObservableCollection<WishList>();
+
+							_lists.Clear();
+
+							if (t.Status == TaskStatus.RanToCompletion)
+							{
+								foreach (var wl in t.Result)
+									_lists.Add(wl);
+
+								RaisePropertyChanged(() => Lists);
+							}
+
+						});
 
 					IsLoading = false;
 				});

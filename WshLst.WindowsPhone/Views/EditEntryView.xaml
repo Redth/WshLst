@@ -20,6 +20,7 @@
         <phone:Pivot Title="WSH LST">
             <!--Pivot item one-->
             <phone:PivotItem Header="add item" Margin="10,-10,10,0">
+				<ScrollViewer>
 				<StackPanel Visibility="{Binding IsLoading, Converter={StaticResource InvertedVisibility}}">
 					<Button Click="scanBarcode_Click">scan barcode</Button>
 					<TextBlock>what is it called?</TextBlock>
@@ -43,10 +44,10 @@
 						
 						<StackPanel Grid.Column="1">
 							<TextBlock>photo</TextBlock>
-							<Image Name="photo" Source="{Binding EntryImage.Base64Image, Converter={StaticResource Base64Image}}" Visibility="{Binding HasPhoto, Converter={StaticResource Visibility}}" Width="160"></Image>
-							<Button Name="buttonPhotoChoose" Click="choosePhoto_Click" Visibility="{Binding HasPhoto, Converter={StaticResource InvertedVisibility}}">choose photo</Button>
-							<Button Name="buttonPhotoTake" Click="takePhoto_Click" Visibility="{Binding HasPhoto, Converter={StaticResource InvertedVisibility}}">take photo</Button>
-							<Button Name="buttonRemPhoto" Click="removePhoto_Click" Visibility="{Binding HasPhoto, Converter={StaticResource Visibility}}">remove photo</Button>
+							<Image Name="photo" Source="{Binding EntryImage.ImageBase64, Converter={StaticResource Base64Image}}" Visibility="{Binding HasImage, Converter={StaticResource Visibility}}" Width="160"></Image>
+							<Button Name="buttonPhotoChoose" Click="choosePhoto_Click" Visibility="{Binding HasImage, Converter={StaticResource InvertedVisibility}}">choose photo</Button>
+								<Button Name="buttonPhotoTake" Click="takePhoto_Click" Visibility="{Binding HasImage, Converter={StaticResource InvertedVisibility}}">take photo</Button>
+								<Button Name="buttonRemPhoto" Click="removePhoto_Click" Visibility="{Binding HasImage, Converter={StaticResource Visibility}}">remove photo</Button>
 						</StackPanel>
 					</Grid>
 					
@@ -55,6 +56,7 @@
 					<TextBox TextWrapping="Wrap" Height="120" Text="{Binding Entry.Notes, Mode=TwoWay, UpdateSourceTrigger=Explicit}" TextChanged="textbox_Changed"></TextBox>
 					
 				</StackPanel>
+				</ScrollViewer>
 			</phone:PivotItem>
 
             <!--Pivot item two-->

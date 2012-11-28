@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Cirrious.MvvmCross.Commands;
@@ -9,7 +10,7 @@ namespace WshLst.Core.ViewModels
 	public class WishListViewModel : BaseViewModel
 	{
 		public string ListId = string.Empty;
-		private List<Entry> _entries;
+		private ObservableCollection<Entry> _entries;
 
 		private WishList _wishList;
 
@@ -28,7 +29,7 @@ namespace WshLst.Core.ViewModels
 			}
 		}
 
-		public List<Entry> Entries
+		public ObservableCollection<Entry> Entries
 		{
 			get { return _entries; }
 			set
@@ -82,17 +83,25 @@ namespace WshLst.Core.ViewModels
 		{
 			IsLoading = true;
 
+			var entryId = entry.Id;
+
 			App.Azure.GetTable<Entry>().DeleteAsync(entry).ContinueWith(t =>
 				{
 					var ex = t.Exception;
 
 					IsLoading = false;
 
-					if (t.Status == TaskStatus.RanToCompletion)
-					{
-						_entries.Remove(entry);
-						RaisePropertyChanged("Entries");
-					}
+					this.InvokeOnMainThread(() =>
+						{
+							if (t.Status == TaskStatus.RanToCompletion)
+							{
+								if (_entries == null)
+									return;
+
+								_entries.Remove(entry);
+								RaisePropertyChanged("Entries");
+							}
+						});
 				});
 		}
 
@@ -127,16 +136,25 @@ namespace WshLst.Core.ViewModels
 
 					IsLoading = false;
 
-					if (t.Status == TaskStatus.RanToCompletion)
-					{
-						_entries = new List<Entry>();
-						_entries.AddRange(t.Result);
-						RaisePropertyChanged("Entries");
-					}
-					else
-					{
-						ReportError("Failed to load items from WishList!");
-					}
+					InvokeOnMainThread(() =>
+						{
+							if (t.Status == TaskStatus.RanToCompletion)
+							{
+								if (_entries == null)
+									_entries = new ObservableCollection<Entry>();
+
+								_entries.Clear();
+
+								foreach (var e in t.Result)	
+									_entries.Add(e);
+
+								RaisePropertyChanged("Entries");
+							}
+							else
+							{
+								ReportError("Failed to load items from WishList!");
+							}
+						});
 				});
 		}
 
