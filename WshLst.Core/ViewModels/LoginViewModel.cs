@@ -1,13 +1,10 @@
 using System;
-using System.Windows.Input;
 using System.Collections.Generic;
-using Cirrious.MvvmCross.ViewModels;
-using Cirrious.MvvmCross.Commands;
-using WshLst.Core.Models;
+using System.Threading.Tasks;
 using Cirrious.MvvmCross.ExtensionMethods;
-using Cirrious.MvvmCross.Interfaces;
-using Cirrious.MvvmCross.Interfaces.ServiceProvider;
 using Microsoft.WindowsAzure.MobileServices;
+using WshLst.Core.Interfaces;
+using WshLst.Core.Models;
 
 namespace WshLst.Core.ViewModels
 {
@@ -15,29 +12,32 @@ namespace WshLst.Core.ViewModels
 	{
 		public LoginViewModel()
 		{
-			var settings = this.GetService<Interfaces.ISettingsProvider>();
+			var settings = this.GetService<ISettingsProvider>();
 			settings.Load();
 
-			Platforms = new List<LoginPlatform>()
-			{
-				new LoginPlatform() { Name = "Twitter", Provider = MobileServiceAuthenticationProvider.Twitter },
-				new LoginPlatform() { Name = "Facebook", Provider = MobileServiceAuthenticationProvider.Facebook },
-				new LoginPlatform() { Name = "Google", Provider = MobileServiceAuthenticationProvider.Google },
-				new LoginPlatform() { Name = "Microsoft", Provider = MobileServiceAuthenticationProvider.MicrosoftAccount },
-			};
+			Platforms = new List<LoginPlatform>
+				{
+					new LoginPlatform {Name = "Twitter", Provider = MobileServiceAuthenticationProvider.Twitter},
+					new LoginPlatform {Name = "Facebook", Provider = MobileServiceAuthenticationProvider.Facebook},
+					new LoginPlatform {Name = "Google", Provider = MobileServiceAuthenticationProvider.Google},
+					new LoginPlatform {Name = "Microsoft", Provider = MobileServiceAuthenticationProvider.MicrosoftAccount},
+				};
 
-			var geo = this.GetService<Interfaces.IGeolocator>();
+			var geo = this.GetService<IGeolocator>();
 			geo.StartTracking();
 		}
 
-		List<LoginPlatform> platforms;
+		private List<LoginPlatform> _platforms;
+
 		public List<LoginPlatform> Platforms
 		{
-			get { return platforms; }
-			set { platforms = value; RaisePropertyChanged("Platforms"); }
+			get { return _platforms; }
+			set
+			{
+				_platforms = value;
+				RaisePropertyChanged("Platforms");
+			}
 		}
-
-		//public ICommand LoginCommand { get { return new MvxRelayCommand<LoginPlatform>(Login); } }
 
 #if MONOTOUCH
 		public MonoTouch.UIKit.UIViewController ViewController { get;set; }
@@ -45,9 +45,9 @@ namespace WshLst.Core.ViewModels
 
 		public void Login(LoginPlatform platform)
 		{
-			this.IsLoading = true;
+			IsLoading = true;
 
-            App.Logout();
+			App.Logout();
 
 #if MONOANDROID
 			var activity = this.GetService<Cirrious.MvvmCross.Droid.Interfaces.IMvxAndroidCurrentTopActivity>().Activity;
@@ -58,39 +58,40 @@ namespace WshLst.Core.ViewModels
 #else
 			App.Azure.LoginAsync(platform.Provider).ContinueWith((t) =>
 #endif
-			{
-				this.IsLoading = false;
+				{
+					IsLoading = false;
 
-				if (t.Status == System.Threading.Tasks.TaskStatus.RanToCompletion && t.Result != null && !string.IsNullOrEmpty(t.Result.UserId))
-				{
-					//Save our app settings for next launch
-					var settings = this.GetService<Interfaces.ISettingsProvider>();
-										
-					settings.UserId = t.Result.UserId;
-					settings.AuthenticationProvider = (int)platform.Provider;
-					settings.Save();
-					
-					//Navigate to the Lists view
-					RequestNavigate<WishListsViewModel>();
-				}
-				else
-				{
-					//Show Error
-					this.ReportError("Login Failed!");
-				}
-			});
+					if (t.Status == TaskStatus.RanToCompletion && t.Result != null && !string.IsNullOrEmpty(t.Result.UserId))
+					{
+						//Save our app settings for next launch
+						var settings = this.GetService<ISettingsProvider>();
+
+						settings.UserId = t.Result.UserId;
+						settings.AuthenticationProvider = (int) platform.Provider;
+						settings.Save();
+
+						//Navigate to the Lists view
+						RequestNavigate<WishListsViewModel>();
+					}
+					else
+					{
+						//Show Error
+						ReportError("Login Failed!");
+					}
+				});
 		}
-			                                                                    
+
 		public void CheckLogin()
 		{
-			var settings = this.GetService<Interfaces.ISettingsProvider>();
-			
-			if (settings.AuthenticationProvider >= 0)
-			{
-				var provider = (MobileServiceAuthenticationProvider)Enum.Parse(typeof(MobileServiceAuthenticationProvider), settings.AuthenticationProvider.ToString());
+			var settings = this.GetService<ISettingsProvider>();
 
-				Login(new LoginPlatform() { Provider = provider, Name = string.Empty });	
-			}
+			if (settings.AuthenticationProvider < 0) return;
+			
+			var provider =
+				(MobileServiceAuthenticationProvider)
+				Enum.Parse(typeof (MobileServiceAuthenticationProvider), settings.AuthenticationProvider.ToString());
+
+			Login(new LoginPlatform {Provider = provider, Name = string.Empty});
 		}
 	}
 }

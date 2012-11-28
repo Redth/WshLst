@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-using WshLst.Core.ViewModels;
 using Cirrious.MvvmCross.WindowsPhone.Views;
-
+using WshLst.Core.Models;
+using WshLst.Core.ViewModels;
 
 namespace WshLst.Views
 {
-	public class BaseLoginView : MvxPhonePage<LoginViewModel> { }
+	public class BaseLoginView : MvxPhonePage<LoginViewModel>
+	{
+	}
 
 	public partial class LoginView : BaseLoginView
 	{
@@ -21,24 +17,25 @@ namespace WshLst.Views
 		{
 			InitializeComponent();
 		}
-				
+
 		private void loginButton_Click(object sender, RoutedEventArgs e)
 		{
 			var button = sender as Button;
-			var item = button.Tag as WshLst.Core.Models.LoginPlatform;
+			if (button == null) return;
+			var item = button.Tag as LoginPlatform;
 
-			this.ViewModel.Login(item);
+			ViewModel.Login(item);
 		}
 
 		protected override void OnNavigatedTo(NavigationEventArgs e)
 		{
 			base.OnNavigatedTo(e);
 
-			if (WshLst.Core.App.IsLaunch)
+			if (Core.App.IsLaunch)
 			{
-				WshLst.Core.App.IsLaunch = false;
+				Core.App.IsLaunch = false;
 
-				this.ViewModel.CheckLogin();
+				ViewModel.CheckLogin();
 			}
 		}
 	}

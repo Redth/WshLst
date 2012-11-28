@@ -1,18 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-using WshLst.Core.ViewModels;
 using Cirrious.MvvmCross.WindowsPhone.Views;
+using Microsoft.Phone.Controls;
+using WshLst.Core.Models;
+using WshLst.Core.ViewModels;
 
 namespace WshLst.Views
 {
-	public class BaseWishListView : MvxPhonePage<WishListViewModel> { }
+	public class BaseWishListView : MvxPhonePage<WishListViewModel>
+	{
+	}
 
 	public partial class WishListView : BaseWishListView
 	{
@@ -21,17 +20,20 @@ namespace WshLst.Views
 			InitializeComponent();
 		}
 
-		private void itemSelected(object sender, SelectionChangedEventArgs e)
+		private void ItemSelected(object sender, SelectionChangedEventArgs e)
 		{
 			var lb = sender as ListBox;
 
-			if (lb.SelectedIndex >= 0)
-			{
-				var item = lb.SelectedValue as Core.Models.Entry;
+			if (lb == null || lb.SelectedIndex < 0)
+				return;
 
-				this.ViewModel.Select(item);
-			}
+			var item = lb.SelectedValue as Entry;
 
+			if (item == null)
+				return;
+
+			ViewModel.Select(item);
+			
 			lb.SelectedIndex = -1;
 		}
 
@@ -39,25 +41,29 @@ namespace WshLst.Views
 		{
 			base.OnNavigatedTo(e);
 
-			this.ViewModel.LoadListAndItems();
+			ViewModel.LoadListAndItems();
 		}
 
 		private void add_Click(object sender, EventArgs e)
 		{
-			this.ViewModel.Add();
+			ViewModel.Add();
 		}
 
 		private void deleteItem_Click(object sender, RoutedEventArgs e)
 		{
-			var item = (sender as MenuItem).Tag as Core.Models.Entry;
+			var item = ((MenuItem) sender).Tag as Entry;
 
-			if (MessageBox.Show("Are you sure you want to delete: " + item.Name + "?", "Delete?", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
-				this.ViewModel.Delete(item);
+			if (item == null)
+				return;
+
+			if (MessageBox.Show("Are you sure you want to delete: " + item.Name + "?", "Delete?", MessageBoxButton.OKCancel) ==
+			    MessageBoxResult.OK)
+				ViewModel.Delete(item);
 		}
 
 		private void share_Click(object sender, EventArgs e)
 		{
-			this.ViewModel.Share();
+			ViewModel.Share();
 		}
 	}
 }

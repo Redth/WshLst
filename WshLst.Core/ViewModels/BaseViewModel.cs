@@ -1,19 +1,21 @@
-using System;
 using Cirrious.MvvmCross.ViewModels;
 using Cirrious.MvvmCross.ExtensionMethods;
-using Cirrious.MvvmCross.Interfaces.ServiceProvider;
 using WshLst.Core.Interfaces;
 
 namespace WshLst.Core.ViewModels
 {
-	public abstract class BaseViewModel : MvxViewModel, IMvxServiceConsumer
+	public abstract class BaseViewModel : MvxViewModel
 	{
-		
-		bool isLoading = false;
+		private bool _isLoading;
+
 		public bool IsLoading
 		{
-			get { return isLoading; }
-			set { isLoading = value; RaisePropertyChanged("IsLoading"); }
+			get { return _isLoading; }
+			set
+			{
+				_isLoading = value;
+				RaisePropertyChanged("IsLoading");
+			}
 		}
 
 		public void ReportError(string error)

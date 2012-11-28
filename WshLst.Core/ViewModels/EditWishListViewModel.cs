@@ -1,7 +1,5 @@
 using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Cirrious.MvvmCross.ViewModels;
 using WshLst.Core.Models;
 
 namespace WshLst.Core.ViewModels
@@ -10,7 +8,7 @@ namespace WshLst.Core.ViewModels
 	{
 		public EditWishListViewModel(string listId)
 		{
-			this.ListId = listId;
+			ListId = listId;
 		}
 
 		public string ListId { get; set; }
@@ -20,62 +18,60 @@ namespace WshLst.Core.ViewModels
 
 		public string ViewTitle
 		{
-			get { return string.IsNullOrEmpty(this.ListId) ? "New Wish List" : "Edit Wish List"; }
+			get { return string.IsNullOrEmpty(ListId) ? "New Wish List" : "Edit Wish List"; }
 		}
 
 
 		public void Save()
 		{
-			this.IsLoading = true;
-			
-			var model = new WishList() { Name = this.Name, Description = this.Description };
+			IsLoading = true;
+
+			var model = new WishList {Name = Name, Description = Description};
 
 			int id = 0;
-			if (!string.IsNullOrEmpty(this.ListId) && int.TryParse(this.ListId, out id))
+			if (!string.IsNullOrEmpty(ListId) && int.TryParse(ListId, out id))
 				model.Id = id;
 
-			var onComplete = new Action<Task>((t) =>
-			{
-				var ex = t.Exception;
+			var onComplete = new Action<Task>(t =>
+				{
+					var ex = t.Exception;
 
-				this.IsLoading = false;
+					IsLoading = false;
 
-				if (t.Status != System.Threading.Tasks.TaskStatus.RanToCompletion)
-					this.ReportError("Unable to save your new Wish List!");
-				else
-					RequestClose(this);
+					if (t.Status != TaskStatus.RanToCompletion)
+						ReportError("Unable to save your new Wish List!");
+					else
+						RequestClose(this);
+				});
 
-			});
-
-			if (string.IsNullOrEmpty(this.ListId))
+			if (string.IsNullOrEmpty(ListId))
 				App.Azure.GetTable<WishList>().InsertAsync(model).ContinueWith(onComplete);
 			else
 				App.Azure.GetTable<WishList>().UpdateAsync(model).ContinueWith(onComplete);
-
 		}
 
 		public void LoadList()
 		{
-			if (string.IsNullOrEmpty(this.ListId))
+			if (string.IsNullOrEmpty(ListId))
 				return;
 
-			this.IsLoading = true;
+			IsLoading = true;
 
-			App.Azure.GetTable<WishList>().LookupAsync(this.ListId).ContinueWith((t) =>
-			{
-				var ex = t.Exception;
-
-				this.IsLoading = false;
-
-				if (t.Status == System.Threading.Tasks.TaskStatus.RanToCompletion && t.Result != null)
+			App.Azure.GetTable<WishList>().LookupAsync(ListId).ContinueWith(t =>
 				{
-					this.Name = t.Result.Name;
-					this.Description = t.Result.Description;
-					this.RaisePropertyChanged("Name");
-					this.RaisePropertyChanged("Description");
-					this.RaisePropertyChanged("ViewTitle");
-				}
-			});
+					var ex = t.Exception;
+
+					IsLoading = false;
+
+					if (t.Status == TaskStatus.RanToCompletion && t.Result != null)
+					{
+						Name = t.Result.Name;
+						Description = t.Result.Description;
+						RaisePropertyChanged("Name");
+						RaisePropertyChanged("Description");
+						RaisePropertyChanged("ViewTitle");
+					}
+				});
 		}
 
 		public void Cancel()

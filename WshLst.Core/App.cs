@@ -1,6 +1,3 @@
-using System;
-using Cirrious.MvvmCross;
-using Cirrious.MvvmCross.Core;
 using Cirrious.MvvmCross.Application;
 using Cirrious.MvvmCross.ExtensionMethods;
 using Cirrious.MvvmCross.Interfaces.ServiceProvider;
@@ -10,21 +7,21 @@ using WshLst.Core.Interfaces;
 
 namespace WshLst.Core
 {
-	public class App : MvxApplication, 
-		IMvxServiceProducer<IMvxStartNavigation>,  
-		IMvxServiceProducer<IErrorReporter>, 
-		IMvxServiceProducer<IErrorSource>, 
-		IMvxServiceProducer<ISettingsProvider>,
-		IMvxServiceProducer<IGeolocator>,
-		IMvxServiceProducer<IBarcodeScanner>,
-		IMvxServiceProducer<IMediaFileSource>
+	public class App : MvxApplication,
+	                   IMvxServiceProducer<IMvxStartNavigation>,
+	                   IMvxServiceProducer<IErrorReporter>,
+	                   IMvxServiceProducer<IErrorSource>,
+	                   IMvxServiceProducer<ISettingsProvider>,
+	                   IMvxServiceProducer<IGeolocator>,
+	                   IMvxServiceProducer<IBarcodeScanner>,
+	                   IMvxServiceProducer<IMediaFileSource>
 	{
 		public static bool IsLaunch = true;
 
 		public static MobileServiceClient Azure;
-				
+
 		public App()
-		{			
+		{
 			var errAppObj = new ErrorApplicationObject();
 			var settings = new Settings();
 			settings.Load();
@@ -40,12 +37,11 @@ namespace WshLst.Core
 
 			this.RegisterServiceInstance<IGeolocator>(geo);
 			this.RegisterServiceInstance<IBarcodeScanner>(new BarcodeApplicatonObject());
-			
 		}
 
-        public static void Logout()
-        {
-            Azure = new MobileServiceClient(Config.AZURE_MOBILE_SERVICE_URL, Config.AZURE_MOBILE_SERVICE_APPKEY);
-        }
+		public static void Logout()
+		{
+			Azure = new MobileServiceClient(Config.AZURE_MOBILE_SERVICE_URL, Config.AZURE_MOBILE_SERVICE_APPKEY);
+		}
 	}
 }

@@ -30,7 +30,7 @@
 
 		<!--ContentPanel - place additional content here-->
 		<Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
-			<ListBox ItemsSource="{Binding Lists}" SelectionChanged="itemSelected">
+			<ListBox ItemsSource="{Binding Lists}" SelectionChanged="ItemSelected">
 				<ListBox.ItemTemplate>
 					<DataTemplate>
 						<StackPanel Margin="10,0,10,15">

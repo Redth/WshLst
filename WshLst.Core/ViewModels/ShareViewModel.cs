@@ -1,32 +1,33 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Globalization;
 using Xamarin.Contacts;
-using Cirrious.MvvmCross.ExtensionMethods;
 
 namespace WshLst.Core.ViewModels
 {
 	public class ShareViewModel : BaseViewModel
 	{
+		private List<SelectableContact> _contacts;
+
 		public ShareViewModel(string listId, string listGuid)
 		{
-			this.ListId = listId;
-			this.ListGuid = listGuid;
+			ListId = listId;
+			ListGuid = listGuid;
 		}
 
 		public string ListId { get; set; }
 		public string ListGuid { get; set; }
 
-		List<SelectableContact> contacts;
 		public List<SelectableContact> Contacts
 		{
-			get { return contacts; }
-			set { contacts = value; RaisePropertyChanged("Contacts"); }
+			get { return _contacts; }
+			set
+			{
+				_contacts = value;
+				RaisePropertyChanged("Contacts");
+			}
 		}
-		
+
 		public void LoadContacts()
 		{
 #if MONOANDROID
@@ -38,10 +39,18 @@ namespace WshLst.Core.ViewModels
 
 			var allContacts = ab.ToList();
 
-			contacts = (from c in allContacts
-						orderby c.DisplayName
-						where c.Emails != null && c.Emails.Count() > 0
-						select new SelectableContact() { DisplayName = c.DisplayName, Email = (c.Emails != null && c.Emails.Count() > 0 ? c.Emails.FirstOrDefault().Address : string.Empty), IsSelected = false }).ToList();
+			_contacts = (from c in allContacts
+			             orderby c.DisplayName
+			             where c.Emails != null && c.Emails.Any()
+			             let email = c.Emails.FirstOrDefault()
+			             where email != null && !string.IsNullOrEmpty(email.Address)
+			             select
+				             new SelectableContact
+					             {
+						             DisplayName = c.DisplayName,
+						             Email = email.Address,
+						             IsSelected = false
+					             }).ToList();
 
 			RaisePropertyChanged("Contacts");
 		}
@@ -53,15 +62,15 @@ namespace WshLst.Core.ViewModels
 
 		public void Finished()
 		{
-			RequestNavigate<WishListViewModel>(new { listId = this.ListId });
+			RequestNavigate<WishListViewModel>(new {listId = ListId});
 		}
 
 		public string GetEmailTo()
 		{
-			if (contacts == null || contacts.Count <= 0)
+			if (_contacts == null || _contacts.Count <= 0)
 				return string.Empty;
 
-			var selContacts = from c in contacts where c.IsSelected select c.Email;
+			var selContacts = from c in _contacts where c.IsSelected select c.Email;
 
 			return string.Join("; ", selContacts);
 		}
@@ -74,9 +83,16 @@ namespace WshLst.Core.ViewModels
 
 		public string GetEmailBody()
 		{
-			var url = string.Format(WshLst.Core.Config.AZURE_WEBSITE_URL + "/?id={0}", this.ListGuid);
+			var url = string.Format(Config.AZURE_WEBSITE_URL + "/?id={0}", ListGuid);
 
 			return "Hi, I'd like to share my wish list with you!  You can see my Wish List online at: \r\n\r\n" + url;
+		}
+
+		public class SelectableContact
+		{
+			public bool IsSelected { get; set; }
+			public string DisplayName { get; set; }
+			public string Email { get; set; }
 		}
 
 		public class SelectableContactGroup : IEnumerable<SelectableContact>
@@ -84,12 +100,7 @@ namespace WshLst.Core.ViewModels
 			public string Title { get; set; }
 			public List<SelectableContact> Items { get; set; }
 
-			public IEnumerator<SelectableContact> GetEnumerator()
-			{
-				return Items.GetEnumerator();
-			}
-
-			System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
+			IEnumerator IEnumerable.GetEnumerator()
 			{
 				return Items.GetEnumerator();
 			}
@@ -98,14 +109,11 @@ namespace WshLst.Core.ViewModels
 			{
 				return Items.GetEnumerator();
 			}
-		}
 
-		public class SelectableContact
-		{
-			public bool IsSelected { get; set; }
-			public string DisplayName { get; set; }
-			public string Email { get; set; } 
+			public IEnumerator<SelectableContact> GetEnumerator()
+			{
+				return Items.GetEnumerator();
+			}
 		}
-		
 	}
 }

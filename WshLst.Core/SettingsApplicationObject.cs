@@ -1,13 +1,9 @@
 using System;
 using System.IO;
 using System.IO.IsolatedStorage;
-using Cirrious.MvvmCross.Application;
-using Cirrious.MvvmCross.Core;
-using Cirrious.MvvmCross.Interfaces;
 using Cirrious.MvvmCross.ViewModels;
+using Newtonsoft.Json;
 using WshLst.Core.Interfaces;
-using Microsoft.WindowsAzure.MobileServices;
-
 
 namespace WshLst.Core
 {
@@ -21,11 +17,11 @@ namespace WshLst.Core
 
 		public string UserId { get; set; }
 		public int AuthenticationProvider { get; set; }
-		
+
 		public void Load()
 		{
 			try
-			{ 
+			{
 				var json = string.Empty;
 
 				using (var isolatedStorage = IsolatedStorageFile.GetUserStoreForApplication())
@@ -35,19 +31,21 @@ namespace WshLst.Core
 					json = sw.ReadToEnd();
 				}
 
-				var settings = Newtonsoft.Json.JsonConvert.DeserializeObject<Settings>(json);
+				var settings = JsonConvert.DeserializeObject<Settings>(json);
 
-				this.UserId = settings.UserId;
-				this.AuthenticationProvider = settings.AuthenticationProvider;
+				UserId = settings.UserId;
+				AuthenticationProvider = settings.AuthenticationProvider;
 			}
-			catch {  }
+			catch (Exception)
+			{
+			}
 		}
 
 		public void Save()
 		{
 			try
 			{
-				var json = Newtonsoft.Json.JsonConvert.SerializeObject(this);
+				var json = JsonConvert.SerializeObject(this);
 
 				using (var isolatedStorage = IsolatedStorageFile.GetUserStoreForApplication())
 				using (var file = new IsolatedStorageFileStream("Settings.json", FileMode.Create, isolatedStorage))
@@ -57,7 +55,9 @@ namespace WshLst.Core
 					sw.Flush();
 				}
 			}
-			catch { }
+			catch (Exception)
+			{
+			}
 		}
 	}
 }

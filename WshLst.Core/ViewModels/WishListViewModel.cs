@@ -1,122 +1,127 @@
-using System;
-using System.Windows.Input;
 using System.Collections.Generic;
-using Cirrious.MvvmCross.ViewModels;
-using Cirrious.MvvmCross.Commands;
+using System.Threading.Tasks;
 using WshLst.Core.Models;
 
 namespace WshLst.Core.ViewModels
 {
 	public class WishListViewModel : BaseViewModel
 	{
+		public string ListId = string.Empty;
+		private List<Entry> _entries;
+
+		private WishList _wishList;
+
 		public WishListViewModel(string listId)
 		{
-			this.ListId = listId;
+			ListId = listId;
 		}
 
-		public string ListId = string.Empty;
-
-		WishList wishList;
 		public WishList WishList
 		{
-			get { return wishList; }
-			set { wishList = value; RaisePropertyChanged("WishList"); }
+			get { return _wishList; }
+			set
+			{
+				_wishList = value;
+				RaisePropertyChanged("WishList");
+			}
 		}
 
-		List<Entry> entries;
 		public List<Entry> Entries
 		{
-			get { return entries; }
-			set { entries = value; RaisePropertyChanged("Entries"); }
+			get { return _entries; }
+			set
+			{
+				_entries = value;
+				RaisePropertyChanged("Entries");
+			}
 		}
 
 		public void Add()
-		{	
-			RequestNavigate<EditEntryViewModel>(new { listId = this.WishList.Id, entryId = string.Empty });
+		{
+			RequestNavigate<EditEntryViewModel>(new {listId = WishList.Id, entryId = string.Empty});
 		}
 
-		public void Select(Models.Entry entry)
+		public void Select(Entry entry)
 		{
-			RequestNavigate<EntryViewModel>(new { listId = this.WishList.Id, entryId = entry.Id });
+			RequestNavigate<EntryViewModel>(new {listId = WishList.Id, entryId = entry.Id});
 		}
 
-		public void Edit(Models.Entry entry)
+		public void Edit(Entry entry)
 		{
-			RequestNavigate<EditEntryViewModel>(new { listId = this.WishList.Id, entryId = entry.Id });
+			RequestNavigate<EditEntryViewModel>(new {listId = WishList.Id, entryId = entry.Id});
 		}
 
 		public void Edit()
 		{
-			RequestNavigate<EditWishListViewModel>(new { listId = this.WishList.Id });
+			RequestNavigate<EditWishListViewModel>(new {listId = WishList.Id});
 		}
 
 		public void Delete(Entry entry)
 		{
-			this.IsLoading = true;
+			IsLoading = true;
 
-			App.Azure.GetTable<Entry>().DeleteAsync(entry).ContinueWith((t) =>
-			{
-				var ex = t.Exception;
-
-				this.IsLoading = false;
-
-				if (t.Status == System.Threading.Tasks.TaskStatus.RanToCompletion)
+			App.Azure.GetTable<Entry>().DeleteAsync(entry).ContinueWith(t =>
 				{
-					entries.Remove(entry);
-					RaisePropertyChanged("Entries");
-				}
-			});
+					var ex = t.Exception;
+
+					IsLoading = false;
+
+					if (t.Status == TaskStatus.RanToCompletion)
+					{
+						_entries.Remove(entry);
+						RaisePropertyChanged("Entries");
+					}
+				});
 		}
 
 		public void LoadListAndItems()
 		{
-			this.IsLoading = true;
+			IsLoading = true;
 
-			App.Azure.GetTable<WishList>().LookupAsync(this.ListId).ContinueWith((t) =>
-			{
-				var ex = t.Exception;
-
-				if (t.Status == System.Threading.Tasks.TaskStatus.RanToCompletion)
+			App.Azure.GetTable<WishList>().LookupAsync(ListId).ContinueWith(t =>
 				{
-					this.WishList = t.Result;
+					var ex = t.Exception;
 
-					LoadItems();
-				}
-				else
-				{
-					this.IsLoading = false;
-				}
-			});
+					if (t.Status == TaskStatus.RanToCompletion)
+					{
+						WishList = t.Result;
+
+						LoadItems();
+					}
+					else
+					{
+						IsLoading = false;
+					}
+				});
 		}
 
 		public void LoadItems()
 		{
-			this.IsLoading = true;
+			IsLoading = true;
 
-			App.Azure.GetTable<Entry>().Where(e => e.ListId == WishList.Id).ToListAsync().ContinueWith((t) => 
-			{
-				var ex = t.Exception;
-
-				this.IsLoading = false;
-
-				if (t.Status == System.Threading.Tasks.TaskStatus.RanToCompletion)
+			App.Azure.GetTable<Entry>().Where(e => e.ListId == WishList.Id).ToListAsync().ContinueWith(t =>
 				{
-					this.entries = new List<Models.Entry>();
-					this.entries.AddRange(t.Result);
-					RaisePropertyChanged("Entries");
-				}
-				else
-				{
-					this.ReportError("Failed to load items from WishList!");
-				}
+					var ex = t.Exception;
 
-			});
+					IsLoading = false;
+
+					if (t.Status == TaskStatus.RanToCompletion)
+					{
+						_entries = new List<Entry>();
+						_entries.AddRange(t.Result);
+						RaisePropertyChanged("Entries");
+					}
+					else
+					{
+						ReportError("Failed to load items from WishList!");
+					}
+				});
 		}
 
 
 		public void Share()
 		{
-			RequestNavigate<ShareViewModel>(new { listId = this.ListId, listGuid = this.WishList.Guid });
+			RequestNavigate<ShareViewModel>(new {listId = ListId, listGuid = WishList.Guid});
 		}
 	}
 }

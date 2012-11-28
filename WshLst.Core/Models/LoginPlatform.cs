@@ -1,4 +1,3 @@
-using System;
 using Microsoft.WindowsAzure.MobileServices;
 
 namespace WshLst.Core.Models

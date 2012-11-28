@@ -1,5 +1,3 @@
-using System;
-
 namespace WshLst.Core.Interfaces
 {
 	public interface ISettingsProvider

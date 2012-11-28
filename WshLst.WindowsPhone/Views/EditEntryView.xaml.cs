@@ -1,24 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
+using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using Microsoft.Phone.Controls;
-using Microsoft.Phone.Shell;
-using WshLst.Core.ViewModels;
-using Cirrious.MvvmCross.WindowsPhone.Views;
 using Cirrious.MvvmCross.ExtensionMethods;
+using Cirrious.MvvmCross.WindowsPhone.Views;
+using WshLst.Core.Interfaces;
+using WshLst.Core.ViewModels;
 using Xamarin.Media;
 
 namespace WshLst.Views
 {
-	public class BaseNewEntryView : MvxPhonePage<EditEntryViewModel> { }
+	public class BaseNewEntryView : MvxPhonePage<EditEntryViewModel>
+	{
+	}
 
 	public partial class EditEntryView : BaseNewEntryView
 	{
+		private BitmapImage _photo;
+
 		public EditEntryView()
 		{
 			InitializeComponent();
@@ -28,109 +30,108 @@ namespace WshLst.Views
 		{
 			base.OnNavigatedTo(e);
 
-			this.ViewModel.LoadEntry();
+			ViewModel.LoadEntry();
 
-
-			this.ViewModel.PropertyChanged += ViewModel_PropertyChanged;		
+			ViewModel.PropertyChanged += ViewModel_PropertyChanged;
 		}
 
-		void ViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+		private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
-			if (e.PropertyName.Equals("EntryImage") && this.ViewModel != null && this.ViewModel.EntryImage != null && !string.IsNullOrEmpty(this.ViewModel.EntryImage.ImageBase64))
+			if (e.PropertyName.Equals("EntryImage") && ViewModel != null && ViewModel.EntryImage != null &&
+			    !string.IsNullOrEmpty(ViewModel.EntryImage.ImageBase64))
 			{
-				this.Photo = new BitmapImage();
+				_photo = new BitmapImage();
 
-				byte[] bytes = Convert.FromBase64String(this.ViewModel.EntryImage.ImageBase64);
-				using (var stream = new System.IO.MemoryStream(bytes))
+				byte[] bytes = Convert.FromBase64String(ViewModel.EntryImage.ImageBase64);
+				using (var stream = new MemoryStream(bytes))
 				{
-					this.Photo.SetSource(stream);
-					this.photo.Source = this.Photo;
+					_photo.SetSource(stream);
+					photo.Source = _photo;
 				}
 			}
 		}
 
 		protected override void OnNavigatedFrom(NavigationEventArgs e)
 		{
-			this.ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
+			ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
 
 			base.OnNavigatedFrom(e);
 		}
 
 		private void cancel_Click(object sender, EventArgs e)
 		{
-			this.ViewModel.Cancel();
+			ViewModel.Cancel();
 		}
 
 		private void save_Click(object sender, EventArgs e)
 		{
-			this.ViewModel.Save();
+			ViewModel.Save();
 		}
 
 		private void textbox_Changed(object sender, TextChangedEventArgs e)
 		{
-			((TextBox)sender).GetBindingExpression(TextBox.TextProperty).UpdateSource();
+			((TextBox) sender).GetBindingExpression(TextBox.TextProperty).UpdateSource();
 		}
 
 		private void scanBarcode_Click(object sender, RoutedEventArgs e)
 		{
-			this.ViewModel.Scan();
+			ViewModel.Scan();
 		}
 
-		System.Windows.Media.Imaging.BitmapImage Photo = null;
-		
-		private async void addPhoto(bool takeNew)
+		private async void AddPhoto(bool takeNew)
 		{
 			//Capture photo file from view
-			var picker = new Xamarin.Media.MediaPicker();
-			var options = new Xamarin.Media.StoreCameraMediaOptions();
-
-			var mediaFileSource = this.GetService<Core.Interfaces.IMediaFileSource>();
+			var mediaFileSource = this.GetService<IMediaFileSource>();
 			MediaFile mediaFile = null;
 
-			try { mediaFile = await mediaFileSource.GetPhoto(takeNew); }
-			catch { }
+			try
+			{
+				mediaFile = await mediaFileSource.GetPhoto(takeNew);
+			}
+			catch (Exception)
+			{
+			}
 
 			if (mediaFile != null && !string.IsNullOrEmpty(mediaFile.Path))
 			{
-				this.Dispatcher.BeginInvoke(() =>
-				{
-					
-					this.Photo = new System.Windows.Media.Imaging.BitmapImage();
-					this.Photo.SetSource(mediaFile.GetStream());
-
-					
-					var photoBase64 = string.Empty;
-					var wbmp = new System.Windows.Media.Imaging.WriteableBitmap(this.Photo);
-										
-					using (var ms = new System.IO.MemoryStream())
+				Dispatcher.BeginInvoke(() =>
 					{
-						wbmp.SaveJpeg(ms, 640, 480, 0, 60);
-						photoBase64 = Convert.ToBase64String(ms.ToArray());
-					}
-					
-					this.ViewModel.AddPhoto(photoBase64);
+						_photo = new BitmapImage();
+						_photo.SetSource(mediaFile.GetStream());
 
-					//Clean up!
-					mediaFile.Dispose();
-				}); 
+
+						var photoBase64 = string.Empty;
+						var wbmp = new WriteableBitmap(_photo);
+
+						using (var ms = new MemoryStream())
+						{
+							wbmp.SaveJpeg(ms, 640, 480, 0, 60);
+							photoBase64 = Convert.ToBase64String(ms.ToArray());
+						}
+
+						ViewModel.AddPhoto(photoBase64);
+
+						//Clean up!
+						mediaFile.Dispose();
+					});
 			}
 		}
 
 		private void removePhoto_Click(object sender, RoutedEventArgs e)
 		{
-			this.photo.Source = null;
-			this.Photo = null;
-			this.ViewModel.RemovePhoto();
+			photo.Source = null;
+			_photo = null;
+			ViewModel.RemovePhoto();
 		}
 
 		private void choosePhoto_Click(object sender, RoutedEventArgs e)
 		{
-			addPhoto(false);
+			AddPhoto(false);
 		}
 
 		private void takePhoto_Click(object sender, RoutedEventArgs e)
 		{
-			addPhoto(true);
+			AddPhoto(true);
 		}
 	}
 }

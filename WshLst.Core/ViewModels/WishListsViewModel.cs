@@ -1,97 +1,100 @@
-using System;
-using System.Windows.Input;
 using System.Collections.Generic;
-using Cirrious.MvvmCross.ViewModels;
-using Cirrious.MvvmCross.Commands;
+using System.Threading.Tasks;
 using Cirrious.MvvmCross.ExtensionMethods;
+using WshLst.Core.Interfaces;
 using WshLst.Core.Models;
 
 namespace WshLst.Core.ViewModels
 {
 	public class WishListsViewModel : BaseViewModel
 	{
+		private List<WishList> _lists;
+
 		public WishListsViewModel()
 		{
 			LoadLists();
 		}
 
-		List<Models.WishList> lists;
-		public List<Models.WishList> Lists
+		public List<WishList> Lists
 		{
-			get { return lists; }
-			set { lists = value; RaisePropertyChanged("Lists"); }
+			get { return _lists; }
+			set
+			{
+				_lists = value;
+				RaisePropertyChanged("Lists");
+			}
 		}
-		
+
 		public void Add()
 		{
 			RequestNavigate<EditWishListViewModel>();
 		}
 
-		public void Select(Models.WishList item)
+		public void Select(WishList item)
 		{
-			RequestNavigate<WishListViewModel>(new { listId = item.Id });
+			RequestNavigate<WishListViewModel>(new {listId = item.Id});
 		}
 
 		public void Edit(WishList item)
 		{
-			RequestNavigate<EditWishListViewModel>(new { listId = item.Id });
+			RequestNavigate<EditWishListViewModel>(new {listId = item.Id});
 		}
 
-		public void Delete(Models.WishList item)
+		public void Delete(WishList item)
 		{
-			this.IsLoading = true;
+			IsLoading = true;
 
-			App.Azure.GetTable<Models.WishList>().DeleteAsync(item).ContinueWith((t) =>
-			{
-				var ex = t.Exception;
-
-				this.IsLoading = false;
-
-				if (t.Status != System.Threading.Tasks.TaskStatus.RanToCompletion)
+			App.Azure.GetTable<WishList>().DeleteAsync(item).ContinueWith(t =>
 				{
-					ReportError("Failed to delete WishList!");
-				}
-				else
-				{
-					this.lists.Remove(item);
-					this.RaisePropertyChanged("Lists");
-				}
-			});
+					var ex = t.Exception;
+
+					IsLoading = false;
+
+					if (t.Status != TaskStatus.RanToCompletion)
+					{
+						ReportError("Failed to delete WishList!");
+					}
+					else
+					{
+						_lists.Remove(item);
+						RaisePropertyChanged("Lists");
+					}
+				});
 		}
 
 		public void LoadLists()
 		{
 			IsLoading = true;
 
-			var settings = this.GetService<Interfaces.ISettingsProvider>();
+			var settings = this.GetService<ISettingsProvider>();
 			var userId = settings.UserId;
 
-			App.Azure.GetTable<Models.WishList>().Where(wl => wl.UserId == userId).ToListAsync().ContinueWith((t) =>
-			{
-				var ex = t.Exception;
-
-				if (t.Status == System.Threading.Tasks.TaskStatus.RanToCompletion)
+			App.Azure.GetTable<WishList>().Where(wl => wl.UserId == userId).ToListAsync().ContinueWith(t =>
 				{
-					lists = new List<WishList>();
-					lists.AddRange(t.Result);
-					RaisePropertyChanged("Lists");
-				}
-				else
-					lists = new List<Models.WishList>();
+					var ex = t.Exception;
 
-				IsLoading = false;				
-			});
+					if (t.Status == TaskStatus.RanToCompletion)
+					{
+						_lists = new List<WishList>();
+						_lists.AddRange(t.Result);
+						RaisePropertyChanged("Lists");
+					}
+					else
+						_lists = new List<WishList>();
+
+					IsLoading = false;
+				});
 		}
 
 		public void Logout()
 		{
-			var settings = this.GetService<Interfaces.ISettingsProvider>();
+			var settings = this.GetService<ISettingsProvider>();
 
 			settings.UserId = string.Empty;
 			settings.AuthenticationProvider = -1;
 			settings.Save();
 
-			RequestNavigate<ViewModels.LoginViewModel>();
+			RequestNavigate<LoginViewModel>();
 		}
 	}
 }

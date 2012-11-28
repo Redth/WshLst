@@ -1,9 +1,6 @@
-using System;
 using Cirrious.MvvmCross.Interfaces.ViewModels;
 using Cirrious.MvvmCross.ViewModels;
 using WshLst.Core.ViewModels;
-using Microsoft.WindowsAzure.MobileServices;
-using WshLst.Core.Interfaces;
 
 namespace WshLst.Core
 {

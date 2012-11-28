@@ -1,7 +1,4 @@
 using System;
-using Cirrious.MvvmCross.Application;
-using Cirrious.MvvmCross.Core;
-using Cirrious.MvvmCross.Interfaces;
 using Cirrious.MvvmCross.ViewModels;
 using WshLst.Core.Interfaces;
 
@@ -15,11 +12,11 @@ namespace WshLst.Core
 				return;
 
 			InvokeOnMainThread(() =>
-			{
-				var handler = ErrorReported;
-				if (handler != null)
-					handler(this, new ErrorEventArgs(error));
-			});
+				{
+					var handler = ErrorReported;
+					if (handler != null)
+						handler(this, new ErrorEventArgs(error));
+				});
 		}
 
 		public event EventHandler<ErrorEventArgs> ErrorReported;

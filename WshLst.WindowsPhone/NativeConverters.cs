@@ -1,76 +1,71 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Windows;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
 namespace WshLst.NativeConverters
 {
-	public class BooleanToVisibilityConverter : System.Windows.Data.IValueConverter
+	public class BooleanToVisibilityConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			if (value == null)
 				return Visibility.Collapsed;
 
-			var isVisible = (bool)value;
+			var isVisible = (bool) value;
 
 			return isVisible ? Visibility.Visible : Visibility.Collapsed;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			var visiblity = (Visibility)value;
+			var visiblity = (Visibility) value;
 
 			return visiblity == Visibility.Visible;
 		}
 	}
 
-	public class InvertedBooleanToVisibilityConverter : System.Windows.Data.IValueConverter
+	public class InvertedBooleanToVisibilityConverter : IValueConverter
 	{
 		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			if (value == null)
 				return Visibility.Visible;
 
-			var isVisible = (bool)value;
+			var isVisible = (bool) value;
 
 			return isVisible ? Visibility.Collapsed : Visibility.Visible;
 		}
 
 		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			var visiblity = (Visibility)value;
+			var visiblity = (Visibility) value;
 
 			return visiblity == Visibility.Collapsed;
 		}
 	}
 
-	public class Base64ImageConverter : System.Windows.Data.IValueConverter
+	public class Base64ImageConverter : IValueConverter
 	{
-		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			var photo = new System.Windows.Media.Imaging.BitmapImage();
+			var photo = new BitmapImage();
 
-			byte[] bytes = System.Convert.FromBase64String((string)value);
-			using (var stream = new System.IO.MemoryStream(bytes))
+			byte[] bytes = System.Convert.FromBase64String((string) value);
+			using (var stream = new MemoryStream(bytes))
 			{
 				photo.SetSource(stream);
 				return photo;
 			}
 		}
 
-		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			var photoBase64 = string.Empty;
+			var wbmp = new WriteableBitmap((BitmapSource) value);
 
-			var wbmp = new System.Windows.Media.Imaging.WriteableBitmap((System.Windows.Media.Imaging.BitmapSource)value);
-
-			//this.photo.Source
-			using (var ms = new System.IO.MemoryStream())
+			using (var ms = new MemoryStream())
 			{
 				wbmp.SaveJpeg(ms, 640, 480, 0, 60);
 
@@ -79,18 +74,14 @@ namespace WshLst.NativeConverters
 		}
 	}
 
-
-	public class StringToVisibilityConverter : System.Windows.Data.IValueConverter
+	public class StringToVisibilityConverter : IValueConverter
 	{
-		public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			if (string.IsNullOrEmpty((string)value))
-				return System.Windows.Visibility.Collapsed;
-			else
-				return System.Windows.Visibility.Visible;
+			return string.IsNullOrEmpty((string) value) ? Visibility.Collapsed : Visibility.Visible;
 		}
 
-		public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
 			throw new NotSupportedException();
 		}
