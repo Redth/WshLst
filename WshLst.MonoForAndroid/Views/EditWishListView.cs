@@ -1,27 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding.Droid.Views;
 using WshLst.Core.ViewModels;
-using WshLst.Core.Models;
 
 namespace WshLst.MonoForAndroid.Views
 {
 	[Activity(Label = "New Wish List", Icon = "@drawable/icontransparent")]
 	public class EditWishListView : MvxBindingActivityView<EditWishListViewModel>
 	{
-		EditText textName;
-		EditText textDescription;
-		Button buttonSave;
-		Button buttonCancel;
+		private Button _buttonCancel;
+		private Button _buttonSave;
+		private EditText _textDescription;
+		private EditText _textName;
 
 		protected override void OnViewModelSet()
 		{
@@ -29,40 +20,37 @@ namespace WshLst.MonoForAndroid.Views
 
 			SetContentView(Resource.Layout.Page_EditWishListView);
 
-			textName = this.FindViewById<EditText>(Resource.Id.textName);
-			textDescription = this.FindViewById<EditText>(Resource.Id.textDescription);
-			buttonCancel = this.FindViewById<Button>(Resource.Id.buttonCancel);
-			buttonSave = this.FindViewById<Button>(Resource.Id.buttonSave);
-			
+			_textName = FindViewById<EditText>(Resource.Id.textName);
+			_textDescription = FindViewById<EditText>(Resource.Id.textDescription);
+			_buttonCancel = FindViewById<Button>(Resource.Id.buttonCancel);
+			_buttonSave = FindViewById<Button>(Resource.Id.buttonSave);
 
-			buttonCancel.Click += (s, e) => { this.ViewModel.Cancel(); };
 
-			buttonSave.Click += (s, e) => 
-			{
-				this.ViewModel.Name = this.textName.Text;
-				this.ViewModel.Description = this.textDescription.Text;
-				
-				this.ViewModel.Save();
-			};
+			_buttonCancel.Click += (s, e) => ViewModel.Cancel();
 
-			this.ViewModel.PropertyChanged += (s, e) =>
-			{
-				switch (e.PropertyName)
+			_buttonSave.Click += (s, e) =>
 				{
-					case "Name":
-						textName.Text = this.ViewModel.Name;
-						break;
-					case "Description":
-						textDescription.Text = this.ViewModel.Description;
-						break;
-					case "ViewTitle":
-						this.Title = this.ViewModel.ViewTitle;
-						break;
-				}
-			};
+					ViewModel.Name = _textName.Text;
+					ViewModel.Description = _textDescription.Text;
 
-			
+					ViewModel.Save();
+				};
 
+			ViewModel.PropertyChanged += (s, e) =>
+				{
+					switch (e.PropertyName)
+					{
+						case "Name":
+							_textName.Text = ViewModel.Name;
+							break;
+						case "Description":
+							_textDescription.Text = ViewModel.Description;
+							break;
+						case "ViewTitle":
+							Title = ViewModel.ViewTitle;
+							break;
+					}
+				};
 		}
 	}
 }

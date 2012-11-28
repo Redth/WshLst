@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Cirrious.MvvmCross.ExtensionMethods;
 using Xamarin.Contacts;
 
 namespace WshLst.Core.ViewModels

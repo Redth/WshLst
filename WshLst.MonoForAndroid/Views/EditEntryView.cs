@@ -1,32 +1,28 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
+using System.Globalization;
+using System.IO;
+using System.Threading.Tasks;
 using Android.App;
-using Android.Content;
+using Android.Graphics;
 using Android.Graphics.Drawables;
-using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding.Droid.Views;
 using Cirrious.MvvmCross.ExtensionMethods;
+using WshLst.Core.Interfaces;
 using WshLst.Core.ViewModels;
-using WshLst.Core.Models;
-using Xamarin.Media;
 
 namespace WshLst.MonoForAndroid.Views
 {
 	[Activity(Label = "Wish List Item", Icon = "@drawable/icontransparent")]
 	public class EditEntryView : MvxBindingActivityView<EditEntryViewModel>
 	{
-		Button buttonScan;
-		ImageView imagePhoto;
-		Button buttonAddPhoto;
-		Button buttonRemovePhoto;
-		Button buttonSave;
-		Button buttonCancel;
+		private Button _buttonAddPhoto;
+		private Button _buttonCancel;
+		private Button _buttonRemovePhoto;
+		private Button _buttonSave;
+		private Button _buttonScan;
+		private ImageView _imagePhoto;
 
 		protected override void OnViewModelSet()
 		{
@@ -34,90 +30,78 @@ namespace WshLst.MonoForAndroid.Views
 
 			SetContentView(Resource.Layout.Page_EditEntryView);
 
-			buttonScan = this.FindViewById<Button>(Resource.Id.buttonScanBarcode);
+			_buttonScan = FindViewById<Button>(Resource.Id.buttonScanBarcode);
 
-			imagePhoto = this.FindViewById<ImageView>(Resource.Id.imagePhoto);
-			buttonAddPhoto = this.FindViewById<Button>(Resource.Id.buttonAddPhoto);
-			buttonRemovePhoto = this.FindViewById<Button>(Resource.Id.buttonRemovePhoto);
-			buttonSave = this.FindViewById<Button>(Resource.Id.buttonSave);
-			buttonCancel = this.FindViewById<Button>(Resource.Id.buttonCancel);
+			_imagePhoto = FindViewById<ImageView>(Resource.Id.imagePhoto);
+			_buttonAddPhoto = FindViewById<Button>(Resource.Id.buttonAddPhoto);
+			_buttonRemovePhoto = FindViewById<Button>(Resource.Id.buttonRemovePhoto);
+			_buttonSave = FindViewById<Button>(Resource.Id.buttonSave);
+			_buttonCancel = FindViewById<Button>(Resource.Id.buttonCancel);
 
-			this.buttonRemovePhoto.Visibility = ViewStates.Gone;
-			this.imagePhoto.Visibility = ViewStates.Gone;
+			_buttonRemovePhoto.Visibility = ViewStates.Gone;
+			_imagePhoto.Visibility = ViewStates.Gone;
 
-			this.buttonScan.Click += (s, e) =>
-			{
-				this.ViewModel.Scan();
-			};
-			
-			this.buttonAddPhoto.Click += (s, e) =>
-			{
-				this.ShowQuestion("Add Photo", "Would you like to Choose an existing photo or Take a New one?", "Take New", "Choose Existing",
-					() => addPhoto(true), () => addPhoto(false));
-			};
+			_buttonScan.Click += (s, e) => ViewModel.Scan();
 
-			this.buttonRemovePhoto.Click += (s, e) =>
-			{
-				this.ViewModel.RemovePhoto();
-			};
+			_buttonAddPhoto.Click += (s, e) => this.ShowQuestion("Add Photo", "Would you like to Choose an existing photo or Take a New one?", "Take New",
+			                                                     "Choose Existing",
+			                                                     () => AddPhoto(true), () => AddPhoto(false));
 
-			this.ViewModel.PropertyChanged += (s, e) =>
-			{
-				switch (e.PropertyName)
+			_buttonRemovePhoto.Click += (s, e) => ViewModel.RemovePhoto();
+
+			ViewModel.PropertyChanged += (s, e) =>
 				{
-					case "EntryImage":
-						if (this.ViewModel.HasImage)
-						{
-							var converter = new Base64ToBitmapDrawableConverter();
-							var drawable = (BitmapDrawable)converter.Convert(this.ViewModel.EntryImage.ImageBase64, typeof(BitmapDrawable), null, System.Globalization.CultureInfo.CurrentCulture);
+					switch (e.PropertyName)
+					{
+						case "EntryImage":
+							if (ViewModel.HasImage)
+							{
+								var converter = new Base64ToBitmapDrawableConverter();
+								var drawable =
+									(BitmapDrawable)
+									converter.Convert(ViewModel.EntryImage.ImageBase64, typeof (BitmapDrawable), null, CultureInfo.CurrentCulture);
 
-							this.imagePhoto.SetImageDrawable(drawable);
-						}
-						break;
-					case "HasImage":
-						if (this.ViewModel.HasImage)
-						{
-							imagePhoto.Visibility = ViewStates.Visible;
-							buttonAddPhoto.Visibility = ViewStates.Gone;
-							buttonRemovePhoto.Visibility = ViewStates.Visible;
-						}
-						else
-						{
-							imagePhoto.Visibility = ViewStates.Gone;
-							buttonAddPhoto.Visibility = ViewStates.Visible;
-							buttonRemovePhoto.Visibility = ViewStates.Gone;
-						}
-						break;
-				}
-			};
+								_imagePhoto.SetImageDrawable(drawable);
+							}
+							break;
+						case "HasImage":
+							if (ViewModel.HasImage)
+							{
+								_imagePhoto.Visibility = ViewStates.Visible;
+								_buttonAddPhoto.Visibility = ViewStates.Gone;
+								_buttonRemovePhoto.Visibility = ViewStates.Visible;
+							}
+							else
+							{
+								_imagePhoto.Visibility = ViewStates.Gone;
+								_buttonAddPhoto.Visibility = ViewStates.Visible;
+								_buttonRemovePhoto.Visibility = ViewStates.Gone;
+							}
+							break;
+					}
+				};
 
-			this.buttonCancel.Click += (s, e) =>
-			{
-				this.ViewModel.Cancel();
-			};
+			_buttonCancel.Click += (s, e) => ViewModel.Cancel();
 
-			this.buttonSave.Click += (s, e) =>
-			{
-				this.ViewModel.Save();
-			};
+			_buttonSave.Click += (s, e) => ViewModel.Save();
 
-			this.ViewModel.LoadEntry();
+			ViewModel.LoadEntry();
 		}
 
-		void addPhoto(bool takeNew)
+		private void AddPhoto(bool takeNew)
 		{
-			var mediaFileSource = this.GetService<Core.Interfaces.IMediaFileSource>();
-			mediaFileSource.GetPhoto(takeNew).ContinueWith((t) =>
-			{
-				var ex = t.Exception;
-
-				if (t.Status == System.Threading.Tasks.TaskStatus.RanToCompletion && t.Result != null)
+			var mediaFileSource = this.GetService<IMediaFileSource>();
+			mediaFileSource.GetPhoto(takeNew).ContinueWith(t =>
 				{
+					var ex = t.Exception;
+
+					if (t.Status != TaskStatus.RanToCompletion || t.Result == null) return;
+
 					var mediaFile = t.Result;
 					byte[] imgData;
-					byte[] buffer = new byte[1024];
+					var buffer = new byte[1024];
 
-					using (var ms = new System.IO.MemoryStream())
+					using (var ms = new MemoryStream())
 					using (var sr = mediaFile.GetStream())
 					{
 						int read = buffer.Length;
@@ -130,13 +114,12 @@ namespace WshLst.MonoForAndroid.Views
 						imgData = ms.ToArray();
 					}
 
-					var bmp = Android.Graphics.BitmapFactory.DecodeByteArray(imgData, 0, imgData.Length);
+					//var bmp = BitmapFactory.DecodeByteArray(imgData, 0, imgData.Length);
 
-					this.ViewModel.AddPhoto(Convert.ToBase64String(imgData));
+					ViewModel.AddPhoto(Convert.ToBase64String(imgData));
 
 					mediaFile.Dispose();
-				}
-			});
+				});
 		}
 	}
 }

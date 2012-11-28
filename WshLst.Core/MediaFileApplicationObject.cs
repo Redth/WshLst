@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
+using Cirrious.MvvmCross.ExtensionMethods;
 using WshLst.Core.Interfaces;
 using Xamarin.Media;
 

@@ -1,5 +1,4 @@
-﻿﻿using Android.App;
-using Cirrious.MvvmCross.Droid.Platform;
+﻿using Android.App;
 using Cirrious.MvvmCross.Droid.Views;
 
 namespace WshLst.MonoForAndroid

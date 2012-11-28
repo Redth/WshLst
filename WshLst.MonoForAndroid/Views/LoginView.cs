@@ -1,27 +1,21 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-using Cirrious.MvvmCross.Droid.Views;
-using Cirrious.MvvmCross.ExtensionMethods;
+using Cirrious.MvvmCross.Binding.Droid;
 using Cirrious.MvvmCross.Binding.Droid.Views;
+using Cirrious.MvvmCross.ExtensionMethods;
 using Cirrious.MvvmCross.Interfaces.ServiceProvider;
-using WshLst.Core.ViewModels;
+using WshLst.Core;
+using WshLst.Core.Interfaces;
 using WshLst.Core.Models;
+using WshLst.Core.ViewModels;
 
 namespace WshLst.MonoForAndroid.Views
 {
 	[Activity(Label = "Wsh Lst - Login", Icon = "@drawable/icontransparent")]
-	public class LoginView : MvxBindingActivityView<LoginViewModel>, IMvxServiceConsumer<WshLst.Core.Interfaces.IGeolocator>
+	public class LoginView : MvxBindingActivityView<LoginViewModel>, IMvxServiceConsumer<IGeolocator>
 	{
-		ListView list;
+		private ListView _list;
 
 		protected override void OnViewModelSet()
 		{
@@ -29,18 +23,18 @@ namespace WshLst.MonoForAndroid.Views
 
 			SetContentView(Resource.Layout.Page_LoginView);
 
-			list = this.FindViewById<ListView>(Resource.Id.mvxList);
+			_list = FindViewById<ListView>(Resource.Id.mvxList);
 
-			list.ItemClick += (s, e) =>
-			{
-				var item = list.Adapter.GetItem(e.Position);
+			_list.ItemClick += (s, e) =>
+				{
+					var item = _list.Adapter.GetItem(e.Position);
 
-				var castItem = (Cirrious.MvvmCross.Binding.Droid.MvxJavaContainer)item;
+					var castItem = (MvxJavaContainer) item;
 
-				this.ViewModel.Login((WshLst.Core.Models.LoginPlatform)castItem.Object);
-			};
+					ViewModel.Login((LoginPlatform) castItem.Object);
+				};
 
-			var geo = this.GetService<WshLst.Core.Interfaces.IGeolocator>();
+			var geo = this.GetService<IGeolocator>();
 			geo.StartTracking();
 		}
 
@@ -48,11 +42,11 @@ namespace WshLst.MonoForAndroid.Views
 		{
 			base.OnStart();
 
-			if (WshLst.Core.App.IsLaunch)
+			if (App.IsLaunch)
 			{
-				WshLst.Core.App.IsLaunch = false;
+				App.IsLaunch = false;
 
-				this.ViewModel.CheckLogin();
+				ViewModel.CheckLogin();
 			}
 		}
 	}

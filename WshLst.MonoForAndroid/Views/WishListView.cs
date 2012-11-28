@@ -1,32 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
-
 using Cirrious.MvvmCross.Binding.Droid;
 using Cirrious.MvvmCross.Binding.Droid.Views;
-using WshLst.Core.ViewModels;
 using WshLst.Core.Models;
+using WshLst.Core.ViewModels;
 
 namespace WshLst.MonoForAndroid.Views
 {
 	[Activity(Label = "Loading Wish List...", Icon = "@drawable/icontransparent")]
 	public class ListViewList : MvxBindingActivityView<WishListViewModel>
 	{
-		ListView list;
+		private ListView _list;
 
 		protected override void OnStart()
 		{
 			base.OnStart();
 
-			this.ViewModel.LoadListAndItems();
+			ViewModel.LoadListAndItems();
 		}
 
 		protected override void OnViewModelSet()
@@ -35,28 +26,28 @@ namespace WshLst.MonoForAndroid.Views
 
 			SetContentView(Resource.Layout.Page_WishListView);
 
-			list = this.FindViewById<ListView>(Resource.Id.mvxList);
+			_list = FindViewById<ListView>(Resource.Id.mvxList);
 
-			list.ItemClick += (s, e) =>
-			{
-				var item = (MvxJavaContainer)list.Adapter.GetItem(e.Position);
-
-				this.ViewModel.Select((Core.Models.Entry)item.Object);
-			};
-
-			this.RegisterForContextMenu(list);
-
-			this.ViewModel.PropertyChanged += (s, e) =>
-			{
-				if (e.PropertyName.Equals("WishList"))
+			_list.ItemClick += (s, e) =>
 				{
-					this.Title = this.ViewModel.WishList.Name;
-				}
-			};
+					var item = (MvxJavaContainer) _list.Adapter.GetItem(e.Position);
 
-			this.ViewModel.LoadListAndItems();
+					ViewModel.Select((Entry) item.Object);
+				};
+
+			RegisterForContextMenu(_list);
+
+			ViewModel.PropertyChanged += (s, e) =>
+				{
+					if (e.PropertyName.Equals("WishList"))
+					{
+						Title = ViewModel.WishList.Name;
+					}
+				};
+
+			ViewModel.LoadListAndItems();
 		}
-		
+
 		public override void OnCreateContextMenu(IContextMenu menu, View v, IContextMenuContextMenuInfo menuInfo)
 		{
 			base.OnCreateContextMenu(menu, v, menuInfo);
@@ -68,24 +59,24 @@ namespace WshLst.MonoForAndroid.Views
 		{
 			if (menuItem.TitleFormatted.ToString().Equals("Edit Item"))
 			{
-				var cmi = (AdapterView.AdapterContextMenuInfo)menuItem.MenuInfo;
+				var cmi = (AdapterView.AdapterContextMenuInfo) menuItem.MenuInfo;
 
-				var item = (Cirrious.MvvmCross.Binding.Droid.MvxJavaContainer)this.list.Adapter.GetItem(cmi.Position);
+				var item = (MvxJavaContainer) _list.Adapter.GetItem(cmi.Position);
 
-				this.ViewModel.Edit((Core.Models.Entry)item.Object);
+				ViewModel.Edit((Entry) item.Object);
 			}
 			else
 			{
-				var cmi = (AdapterView.AdapterContextMenuInfo)menuItem.MenuInfo;
+				var cmi = (AdapterView.AdapterContextMenuInfo) menuItem.MenuInfo;
 
-				var item = (Cirrious.MvvmCross.Binding.Droid.MvxJavaContainer)this.list.Adapter.GetItem(cmi.Position);
+				var item = (MvxJavaContainer) _list.Adapter.GetItem(cmi.Position);
 
 				this.ShowQuestion("Delete?", "Are you sure you want to delete this item?", "Yes", "No",
-					() =>
-					{
-						this.ViewModel.Delete((Core.Models.Entry)item.Object);
-						this.ViewModel.LoadItems();
-					}, null);
+				                  () =>
+					                  {
+						                  ViewModel.Delete((Entry) item.Object);
+						                  ViewModel.LoadItems();
+					                  }, null);
 			}
 
 			return true;
@@ -103,10 +94,10 @@ namespace WshLst.MonoForAndroid.Views
 			switch (item.ItemId)
 			{
 				case Resource.Id.addEntry:
-					this.ViewModel.Add();
+					ViewModel.Add();
 					return true;
 				case Resource.Id.shareWishList:
-					this.ViewModel.Share();
+					ViewModel.Share();
 					return true;
 			}
 			return base.OnOptionsItemSelected(item);

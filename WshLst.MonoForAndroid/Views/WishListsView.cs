@@ -1,48 +1,41 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Cirrious.MvvmCross.Binding.Droid;
 using Cirrious.MvvmCross.Binding.Droid.Views;
-using WshLst.Core.ViewModels;
 using WshLst.Core.Models;
+using WshLst.Core.ViewModels;
 
 namespace WshLst.MonoForAndroid.Views
 {
 	[Activity(Label = "Wish Lists", Icon = "@drawable/icontransparent")]
 	public class WishListsView : MvxBindingActivityView<WishListsViewModel>
 	{
-		ListView list;
+		private ListView _list;
 
 		protected override void OnStart()
 		{
-			this.ViewModel.LoadLists();
+			ViewModel.LoadLists();
 
 			base.OnStart();
 		}
+
 		protected override void OnViewModelSet()
 		{
 			RequestWindowFeature(WindowFeatures.ActionBar);
 
 			SetContentView(Resource.Layout.Page_WishListsView);
 
-			list = this.FindViewById<ListView>(Resource.Id.mvxList);
+			_list = FindViewById<ListView>(Resource.Id.mvxList);
 
-			list.ItemClick += (s, e) =>
-			{
-				var item = (MvxJavaContainer)list.Adapter.GetItem(e.Position);
+			_list.ItemClick += (s, e) =>
+				{
+					var item = (MvxJavaContainer) _list.Adapter.GetItem(e.Position);
 
-				this.ViewModel.Select((Core.Models.WishList)item.Object);
-			};
+					ViewModel.Select((WishList) item.Object);
+				};
 
-			this.RegisterForContextMenu(list);
+			RegisterForContextMenu(_list);
 		}
 
 		public override void OnCreateContextMenu(IContextMenu menu, View v, IContextMenuContextMenuInfo menuInfo)
@@ -54,28 +47,28 @@ namespace WshLst.MonoForAndroid.Views
 
 		public override bool OnContextItemSelected(IMenuItem menuItem)
 		{
-			var cmi = (AdapterView.AdapterContextMenuInfo)menuItem.MenuInfo;
-			
-			var item = (Cirrious.MvvmCross.Binding.Droid.MvxJavaContainer)this.list.Adapter.GetItem(cmi.Position);
+			var cmi = (AdapterView.AdapterContextMenuInfo) menuItem.MenuInfo;
+
+			var item = (MvxJavaContainer) _list.Adapter.GetItem(cmi.Position);
 
 			if (menuItem.TitleFormatted.ToString().Equals("Delete Wish List"))
 			{
 				this.ShowQuestion("Delete?", "Are you sure you want to delete this Wish List and all the items on it?", "Yes", "No",
-					() =>
-					{
-						this.ViewModel.Delete((WishList)item.Object);
-						this.ViewModel.LoadLists();
-					}, null);
+				                  () =>
+					                  {
+						                  ViewModel.Delete((WishList) item.Object);
+						                  ViewModel.LoadLists();
+					                  }, null);
 			}
 			else
 			{
-				this.ViewModel.Edit((WishList)item.Object);
+				ViewModel.Edit((WishList) item.Object);
 			}
-			
+
 			return true;
 		}
 
-		
+
 		public override bool OnCreateOptionsMenu(IMenu menu)
 		{
 			MenuInflater.Inflate(Resource.Menu.ListsView_Menu, menu);
@@ -87,10 +80,10 @@ namespace WshLst.MonoForAndroid.Views
 			switch (item.ItemId)
 			{
 				case Resource.Id.addList:
-					this.ViewModel.Add();
+					ViewModel.Add();
 					return true;
 				case Resource.Id.logout:
-					this.ViewModel.Logout();
+					ViewModel.Logout();
 					return true;
 			}
 			return base.OnOptionsItemSelected(item);
@@ -100,7 +93,5 @@ namespace WshLst.MonoForAndroid.Views
 		{
 			//base.OnBackPressed();
 		}
-
-				
 	}
 }

@@ -83,7 +83,6 @@
   <ItemGroup />
   <ItemGroup>
     <Compile Include="Config.cs" />
-    <Compile Include="Converters\Converters.cs" />
     <Compile Include="Interfaces\IBarcodeScanner.cs" />
     <Compile Include="Interfaces\IErrorReporter.cs" />
     <Compile Include="Interfaces\IErrorSource.cs" />

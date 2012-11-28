@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Net;
 using Cirrious.MvvmCross.ViewModels;
+using Cirrious.MvvmCross.ExtensionMethods;
 using Newtonsoft.Json.Linq;
 using WshLst.Core.Interfaces;
 using Xamarin.Geolocation;
@@ -18,7 +19,7 @@ namespace WshLst.Core
 		{
 #if MONOANDROID
 			var androidGlobal = this.GetService<Cirrious.MvvmCross.Droid.Interfaces.IMvxAndroidGlobals>();
-			geo = new Geolocator(androidGlobal.ApplicationContext);
+			_geo = new Geolocator(androidGlobal.ApplicationContext);
 #else
 			_geo = new Geolocator();
 #endif

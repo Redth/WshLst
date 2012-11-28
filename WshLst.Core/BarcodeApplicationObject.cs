@@ -2,6 +2,7 @@ using System;
 using System.Net;
 using System.Threading.Tasks;
 using Cirrious.MvvmCross.ViewModels;
+using Cirrious.MvvmCross.ExtensionMethods;
 using Newtonsoft.Json;
 using WshLst.Core.Interfaces;
 using WshLst.Core.Models;

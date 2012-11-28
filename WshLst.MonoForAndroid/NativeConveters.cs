@@ -1,48 +1,34 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Android.App;
-using Android.Content;
-using Android.OS;
-using Android.Runtime;
-using Android.Views;
-using Android.Widget;
-
+using System.Globalization;
+using System.IO;
+using Android.Graphics;
+using Android.Graphics.Drawables;
 using Cirrious.MvvmCross.Converters;
-using Cirrious.MvvmCross.ExtensionMethods;
-using Cirrious.MvvmCross.Interfaces.ServiceProvider;
 
 namespace WshLst.MonoForAndroid
 {
-	public class Base64ToBitmapDrawableConverter : MvxBaseValueConverter  
+	public class Base64ToBitmapDrawableConverter : MvxBaseValueConverter
 	{
-		public override object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			string base64 = string.Empty;
-
-			var bitmapDrawable = (Android.Graphics.Drawables.BitmapDrawable)value;
-			using (var ms = new System.IO.MemoryStream())
+			var bitmapDrawable = (BitmapDrawable) value;
+			using (var ms = new MemoryStream())
 			{
-				bitmapDrawable.Bitmap.Compress(Android.Graphics.Bitmap.CompressFormat.Jpeg, 70, ms);
+				bitmapDrawable.Bitmap.Compress(Bitmap.CompressFormat.Jpeg, 70, ms);
 
-				System.Convert.ToBase64String(ms.ToArray());
+				return System.Convert.ToBase64String(ms.ToArray());
 			}
-
-			return base64;
 		}
 
-		public override object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+		public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
 		{
-			string base64 = (string)value;
+			var base64 = (string) value;
 
 			var bytes = System.Convert.FromBase64String(base64);
 
-			var drawable = Android.Graphics.BitmapFactory.DecodeByteArray(bytes, 0, bytes.Length);
+			var drawable = BitmapFactory.DecodeByteArray(bytes, 0, bytes.Length);
 
-			return new Android.Graphics.Drawables.BitmapDrawable(drawable);
+			return new BitmapDrawable(drawable);
 		}
 	}
-
 }
