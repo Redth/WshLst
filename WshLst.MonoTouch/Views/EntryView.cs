@@ -68,14 +68,8 @@ namespace WshLst.MonoTouch
 				{
 					new MultilineElement("Notes").Bind(this, "{'Value':{'Path':'Entry.Notes'}}"),
 				},
-				new Section("Photo")
-				{
-
-					//new ImageElement(new UIImage("Resources/Icon.png")).Bind(this, "{'Value':{'Path':'EntryImage.ImageBase64','Converter':'Base64ToUIImage'}}")
-				}
+				new Section("Photo") { }
 			};
-
-
 		}
 
 		LoadingHUDView loadingView;

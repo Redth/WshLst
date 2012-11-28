@@ -100,13 +100,21 @@ If you do have issues, try the following:
 	2. Entry
 	3. EntryImage
 6. Open the *Azure-Table-Scripts.js* file from this repository and copy/paste the corresponding scripts for each table's read/insert/update/delete operations in the azure portal
-7. In your Azure Mobile Service's *Identity* configuration tab, setup the correct keys/secrets for all the authentication providers.  You will need to follow the Azure help section to setup applications on each authentication provider.
+7. In your Azure Mobile Service's *Identity* configuration tab, setup the correct keys/secrets for all the authentication providers.  You will need to follow the Azure help section to setup applications on each authentication provider (eg: Twitter, Facebook, Google, Microsoft).
 8. Create a new Azure Website and open its dashboard
 9. Download the new website's publishing profile
 10. Open the *WshLst.Web.sln* solution, build the web site, and publish it using your new website's publishing profile.
 11. Edit the *WshLst.Core\Config.cs* file again
 	1. Set the AZURE\_WEBSITE\_URL to the url of the website you just made (be sure you do NOT include the trailing slash)
 
+#####OPTIONAL#####
+Without these optional steps you will be unable to utilize the Google Places or Barcode Scanning features:
+
+1. Signup for a Google Places API, note your API Key
+2. Signup for a Scandit API key, note the key
+3. Edit the *WshLst.Core\Config.cs* file again
+	1. Set the GOOGLE\_PLACES\_API\_KEY to the key you just created
+	2. Set the SCANDIT\_API\_KEY to the key you just created
 
 
 ----------

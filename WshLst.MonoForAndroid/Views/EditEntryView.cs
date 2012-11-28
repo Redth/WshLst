@@ -63,19 +63,10 @@ namespace WshLst.MonoForAndroid.Views
 					var ex = t.Exception;
 
 					if (t.Status != TaskStatus.RanToCompletion || t.Result == null) return;
-
+					
 					using (var mediaFile = t.Result)
 					{
-						byte[] imgData;
-
-						using (var ms = new MemoryStream())
-						using (var sc = mediaFile.GetStream())
-						{
-							sc.CopyTo(ms);
-							imgData = ms.ToArray();
-						}
-
-						ViewModel.AddPhoto(Convert.ToBase64String(imgData));
+						ViewModel.AddPhoto(mediaFile.GetStream());
 					}
 				});
 		}

@@ -31,31 +31,6 @@ namespace WshLst.Views
 			base.OnNavigatedTo(e);
 
 			ViewModel.LoadEntry();
-
-			ViewModel.PropertyChanged += ViewModel_PropertyChanged;
-		}
-
-		private void ViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)
-		{
-			if (e.PropertyName.Equals("EntryImage") && ViewModel != null && ViewModel.EntryImage != null &&
-			    !string.IsNullOrEmpty(ViewModel.EntryImage.ImageBase64))
-			{
-				_photo = new BitmapImage();
-
-				byte[] bytes = Convert.FromBase64String(ViewModel.EntryImage.ImageBase64);
-				using (var stream = new MemoryStream(bytes))
-				{
-					_photo.SetSource(stream);
-					photo.Source = _photo;
-				}
-			}
-		}
-
-		protected override void OnNavigatedFrom(NavigationEventArgs e)
-		{
-			ViewModel.PropertyChanged -= ViewModel_PropertyChanged;
-
-			base.OnNavigatedFrom(e);
 		}
 
 		private void cancel_Click(object sender, EventArgs e)
@@ -82,20 +57,23 @@ namespace WshLst.Views
 		{
 			//Capture photo file from view
 			var mediaFileSource = this.GetService<IMediaFileSource>();
-			MediaFile mediaFile = null;
-
+		
 			try
 			{
-				mediaFile = await mediaFileSource.GetPhoto(takeNew);
+				using (var mediaFile = await mediaFileSource.GetPhoto(takeNew))
+				{
+					ViewModel.AddPhoto(mediaFile.GetStream());
+				}
 			}
 			catch (Exception)
 			{
 			}
 
-			if (mediaFile != null && !string.IsNullOrEmpty(mediaFile.Path))
+			/*if (mediaFile != null && !string.IsNullOrEmpty(mediaFile.Path))
 			{
 				Dispatcher.BeginInvoke(() =>
 					{
+						ViewModel.AddPhoto(mediaFile.GetStream());
 						_photo = new BitmapImage();
 						_photo.SetSource(mediaFile.GetStream());
 
@@ -110,11 +88,11 @@ namespace WshLst.Views
 						}
 
 						ViewModel.AddPhoto(photoBase64);
-
+						
 						//Clean up!
 						mediaFile.Dispose();
 					});
-			}
+			}*/
 		}
 
 		private void removePhoto_Click(object sender, RoutedEventArgs e)

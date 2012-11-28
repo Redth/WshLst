@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Cirrious.MvvmCross.Commands;
@@ -88,6 +89,26 @@ namespace WshLst.Core.ViewModels
 
 		public bool UseLocation { get; set; }
 
+		public ICommand ScanCommand
+		{
+			get { return new MvxRelayCommand(Scan); }
+		}
+
+		public ICommand SaveCommand
+		{
+			get { return new MvxRelayCommand(Save); }
+		}
+
+		public ICommand CancelCommand
+		{
+			get { return new MvxRelayCommand(Cancel); }
+		}
+
+		public ICommand DeleteCommand
+		{
+			get { return new MvxRelayCommand(Delete); }
+		}
+
 		public void AddPhoto(string base64Image)
 		{
 			_entryImage.ImageBase64 = base64Image;
@@ -95,16 +116,25 @@ namespace WshLst.Core.ViewModels
 			RaisePropertyChanged(() => HasImage);
 		}
 
+		public void AddPhoto(Stream base64ImageStream)
+		{
+			byte[] imgData;
+			using (var ms = new MemoryStream())
+			{
+				base64ImageStream.CopyTo(ms);
+				imgData = ms.ToArray();
+			}
+
+			var strImg = Convert.ToBase64String(imgData);
+
+			AddPhoto(strImg);
+		}
+
 		public void RemovePhoto()
 		{
 			_entryImage.ImageBase64 = string.Empty;
 			RaisePropertyChanged(() => EntryImage);
 			RaisePropertyChanged(() => HasImage);
-		}
-
-		public ICommand ScanCommand
-		{
-			get { return new MvxRelayCommand(Scan); }
 		}
 
 		public void Scan()
@@ -126,7 +156,7 @@ namespace WshLst.Core.ViewModels
 							scanner.LookupProduct(t.Result.Text, product =>
 								{
 									if (product != null && !string.IsNullOrEmpty(product.Name) && string.IsNullOrEmpty(_entry.Name))
-									{ 
+									{
 										_entry.Name = product.Name;
 										RaisePropertyChanged(() => Entry);
 									}
@@ -138,11 +168,6 @@ namespace WshLst.Core.ViewModels
 				});
 		}
 
-		public ICommand SaveCommand
-		{
-			get { return new MvxRelayCommand(Save); }
-		}
-	
 		public void Save()
 		{
 			IsLoading = true;
@@ -219,19 +244,9 @@ namespace WshLst.Core.ViewModels
 				App.Azure.GetTable<Entry>().UpdateAsync(Entry).ContinueWith(continuation);
 		}
 
-		public ICommand CancelCommand
-		{
-			get { return new MvxRelayCommand(Cancel); }
-		}
-
 		public void Cancel()
 		{
 			RequestClose(this);
-		}
-
-		public ICommand DeleteCommand
-		{
-			get { return new MvxRelayCommand(Delete); }
 		}
 
 		public void Delete()

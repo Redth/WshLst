@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Threading.Tasks;
 
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
@@ -111,27 +112,21 @@ namespace WshLst.MonoTouch
 		{
 			var mediaFileSource = this.GetService<WshLst.Core.Interfaces.IMediaFileSource>();
 
-			this.InvokeOnMainThread(() => {
-				mediaFileSource.GetPhoto(takeNew).ContinueWith((t) => 
+			this.InvokeOnMainThread(() => 
 				{
-					var ex = t.Exception;
-					if (t.Status == System.Threading.Tasks.TaskStatus.RanToCompletion && t.Result != null)
+					mediaFileSource.GetPhoto(takeNew).ContinueWith((t) => 
 					{
-						var img = UIImage.FromFile(t.Result.Path);
-						var data = System.Convert.ToBase64String(img.AsJPEG().ToArray());
+						var ex = t.Exception;
+						if (t.Status != TaskStatus.RanToCompletion || t.Result == null)
+							return;
+						
+						using (var mediaFile = t.Result)
+						{
+							ViewModel.AddPhoto(mediaFile.GetStream());
 
-
-						this.ViewModel.AddPhoto(data);
-
-						Console.WriteLine("Added Photo");
-
-						//Clean up
-						t.Result.Dispose();
-					}
-					else
-						Console.WriteLine(ex.Flatten().ToString());
+						}
+					});
 				});
-			});
 		}
 
 
