@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:id="@+id/addList" android:titleCondensed="New List" android:title="New Wish List" />
+	<item android:id="@+id/logout" android:titleCondensed="Logout" android:title="Logout" />
+</menu>

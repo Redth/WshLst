@@ -1,0 +1,101 @@
+﻿@model WshLst.Web.ViewModels.WishListViewModel
+
+<!doctype html>
+<html>
+  
+  <head>
+    <title>Wsh Lst -> @this.Model.WishList.Name</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="text/html; charset=UTF-8" http-equiv="Content-Type">
+    <link rel="stylesheet" href="https://app.divshot.com/css/divshot-util.css">
+    <link rel="stylesheet" href="https://app.divshot.com/themes/cerulean/bootstrap.min.css">
+    <link rel="stylesheet" href="https://app.divshot.com/css/bootstrap-responsive.css">
+    <link rel="stylesheet" href="https://djyhxgczejc94.cloudfront.net/builds/40603402baf15988cb132cccdd6305f064f98f70.css">
+    <script src="https://app.divshot.com/js/jquery.min.js"></script>
+  </head>
+  
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="#">Wsh Lst</a>
+          <div class="navbar-content">
+            <ul class="nav "></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container">
+      <div class="hero-unit">
+        <h1>@this.Model.WishList.Name</h1>
+        <p>
+			@(this.Model.WishList.Description ?? "See the items in the Wish List below!") 
+        </p>
+      </div>
+
+      <div class="container">
+      <div class="alert">
+        <a class="close" data-dismiss="alert">×</a>
+        <span>
+          <b>Someone has shared their wish list with you!  Here are all
+            the things they are wishing for!</b>
+          <br> 
+        </span>
+      </div>  
+
+		  
+@foreach (var entry in this.Model.Entries)
+{
+	<div  style="border-bottom: solid 1px #9bc2de; margin: 10px 0px 10px 0px; padding: 10px 0px 15px 0px;">
+	 <div class="row">
+          <div class="span8">
+            <h1>@entry.Name</h1>
+            <div class="container">
+              <span class="label pull-left">Price</span>
+              <div class="wshlst-price pull-left">
+                <p>@entry.Price.Value.ToString("C")</p>
+              </div>
+              <span class="label pull-left">Where to Buy</span>
+              <div class="wshlst-store pull-left">
+                <p>
+					@entry.Store
+
+					@if (entry.Latitude.HasValue && entry.Latitude.Value != 0 && entry.Longitude.HasValue && entry.Longitude.Value != 0) {
+						<a href="http://maps.google.com.au/maps?ll=@entry.Latitude,@entry.Longitude" target="_blank" style="padding-left: 10px;">See Map</a>
+					}
+
+                </p>
+              </div>
+
+				@if (!string.IsNullOrEmpty(entry.Upc))
+				{
+					<span class="label pull-left">Barcode</span>
+					<div class="wshlst-price pull-left">
+						<p><a href="http://www.checkupc.com/search.php?keyword=@entry.Upc" target="_blank">@entry.Upc</a></p>
+					</div>		
+				}
+            </div>
+			@if (!string.IsNullOrEmpty(entry.Notes)) {
+	            <p class=" lead">@entry.Notes</p>
+			}	
+          </div>
+          <div class="span4">
+			@if (entry.HasImage && this.Model.EntryImages[entry.ImageGuid] != null)
+			{
+				<a href="data:image/gif;base64,@this.Model.EntryImages[entry.ImageGuid].ImageBase64" target="_blank">
+					<img src="data:image/gif;base64,@this.Model.EntryImages[entry.ImageGuid].ImageBase64" class="img-rounded pull-right" width="256" style="max-height: 150px;" />
+				</a>
+			}
+          </div>
+        </div>
+		</div>
+}
+
+      </div>
+    </div>
+    <script src="https://app.divshot.com/js/bootstrap.min.js"></script>
+  </body>
+
+</html>

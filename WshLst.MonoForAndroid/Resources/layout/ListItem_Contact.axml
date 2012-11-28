@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:p1="http://schemas.android.com/apk/res/android"
+							xmlns:local="http://schemas.android.com/apk/res/com.wshlst.monoforandroid"
+    p1:orientation="horizontal"
+    p1:minWidth="25px"
+    p1:minHeight="25px"
+    p1:layout_width="fill_parent"
+    p1:layout_height="fill_parent"
+    p1:id="@+id/linearLayout1">
+    <CheckBox
+        p1:layout_width="wrap_content"
+        p1:layout_height="fill_parent"
+				local:MvxBind="{'Checked':{'Path':'IsSelected'}}"
+        p1:id="@+id/checkSelected" />
+    <LinearLayout
+        p1:orientation="vertical"
+        p1:minWidth="25px"
+        p1:minHeight="25px"
+        p1:layout_width="wrap_content"
+        p1:layout_height="fill_parent"
+        p1:id="@+id/linearLayout2"
+        p1:gravity="center"
+        p1:layout_weight="1">
+        <TextView
+						local:MvxBind="{'Text':{'Path':'DisplayName'}}"
+            p1:textAppearance="?android:attr/textAppearanceLarge"
+            p1:layout_width="fill_parent"
+            p1:layout_height="wrap_content"
+            p1:id="@+id/textName" />
+        <TextView
+						local:MvxBind="{'Text':{'Path':'Email'}}"
+            p1:textAppearance="?android:attr/textAppearanceSmall"
+            p1:layout_width="fill_parent"
+            p1:layout_height="wrap_content"
+						p1:layout_marginBottom="5dp"
+            p1:id="@+id/textEmail" />
+    </LinearLayout>
+</LinearLayout>

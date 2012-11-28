@@ -1,0 +1,56 @@
+using System;
+using Cirrious.MvvmCross;
+using Cirrious.MvvmCross.Core;
+using Cirrious.MvvmCross.Application;
+using Cirrious.MvvmCross.ExtensionMethods;
+using Cirrious.MvvmCross.Interfaces.ServiceProvider;
+using Cirrious.MvvmCross.Interfaces.ViewModels;
+using Microsoft.WindowsAzure.MobileServices;
+using WshLst.Core.Interfaces;
+
+namespace WshLst.Core
+{
+	public class App : MvxApplication, 
+		IMvxServiceProducer<IMvxStartNavigation>,  
+		IMvxServiceProducer<IErrorReporter>, 
+		IMvxServiceProducer<IErrorSource>, 
+		IMvxServiceProducer<ISettingsProvider>,
+		IMvxServiceProducer<IGeolocator>,
+		IMvxServiceProducer<IBarcodeScanner>,
+		IMvxServiceProducer<IMediaFileSource>
+	{
+		public static bool IsLaunch = true;
+
+		public static MobileServiceClient Azure;
+
+		//public static Settings Settings;// = new Settings();
+				
+		public App()
+		{			
+			var errAppObj = new ErrorApplicationObject();
+			var settings = new Settings();
+			settings.Load();
+
+			this.RegisterServiceInstance<IMvxStartNavigation>(new StartApplicationObject());
+			this.RegisterServiceInstance<IErrorSource>(errAppObj);
+			this.RegisterServiceInstance<IErrorReporter>(errAppObj);
+			this.RegisterServiceInstance<ISettingsProvider>(settings);
+			this.RegisterServiceInstance<IMediaFileSource>(new MediaFileApplicationObject());
+
+			var geo = new GeolocatorApplicationObject();
+			geo.StartTracking();
+
+			this.RegisterServiceInstance<IGeolocator>(geo);
+
+			this.RegisterServiceInstance<IBarcodeScanner>(new BarcodeApplicatonObject());
+			
+		}
+
+        public static void Logout()
+        {
+            var azureMobileServiceUrl = "";
+            var azureMobileServiceAppKey = "";
+            Azure = new MobileServiceClient(azureMobileServiceUrl, azureMobileServiceAppKey);
+        }
+	}
+}

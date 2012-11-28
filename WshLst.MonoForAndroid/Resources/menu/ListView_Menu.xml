@@ -1,0 +1,5 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+	<item android:id="@+id/addEntry" android:titleCondensed="Add Item" android:title="Add Item" />
+	<item android:id="@+id/shareWishList" android:titleCondensed="Share Wish List" android:title="Share Wish List" />
+</menu>

@@ -1,0 +1,75 @@
+﻿<local:BaseNewEntryView
+    x:Class="WshLst.Views.EditEntryView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+	xmlns:local="clr-namespace:WshLst.Views;assembly=WshLst"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait"  Orientation="Portrait"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <!--Pivot Control-->
+        <phone:Pivot Title="WSH LST">
+            <!--Pivot item one-->
+            <phone:PivotItem Header="add item" Margin="10,-10,10,0">
+				<StackPanel Visibility="{Binding IsLoading, Converter={StaticResource InvertedVisibility}}">
+					<Button Click="scanBarcode_Click">scan barcode</Button>
+					<TextBlock>what is it called?</TextBlock>
+					<TextBox Text="{Binding Entry.Name, Mode=TwoWay, UpdateSourceTrigger=Explicit}" TextChanged="textbox_Changed"></TextBox>
+					
+					
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="*" />
+							<ColumnDefinition Width="200" />
+						</Grid.ColumnDefinitions>
+						
+						<StackPanel Grid.Column="0">
+							<TextBlock>where to buy</TextBlock>
+							<TextBox Text="{Binding Entry.Store, Mode=TwoWay, UpdateSourceTrigger=Explicit}" TextChanged="textbox_Changed"></TextBox>
+							<CheckBox Margin="0,-20,0,0" IsChecked="{Binding UseLocation, Mode=TwoWay}" FontSize="14">include my current location</CheckBox>
+
+							<TextBlock>how much is it?</TextBlock>
+							<TextBox Text="{Binding Entry.Price, Mode=TwoWay, UpdateSourceTrigger=Explicit}" InputScope="CurrencyAmount" TextChanged="textbox_Changed"></TextBox>
+						</StackPanel>
+						
+						<StackPanel Grid.Column="1">
+							<TextBlock>photo</TextBlock>
+							<Image Name="photo" Source="{Binding EntryImage.Base64Image, Converter={StaticResource Base64Image}}" Visibility="{Binding HasPhoto, Converter={StaticResource Visibility}}" Width="160"></Image>
+							<Button Name="buttonPhotoChoose" Click="choosePhoto_Click" Visibility="{Binding HasPhoto, Converter={StaticResource InvertedVisibility}}">choose photo</Button>
+							<Button Name="buttonPhotoTake" Click="takePhoto_Click" Visibility="{Binding HasPhoto, Converter={StaticResource InvertedVisibility}}">take photo</Button>
+							<Button Name="buttonRemPhoto" Click="removePhoto_Click" Visibility="{Binding HasPhoto, Converter={StaticResource Visibility}}">remove photo</Button>
+						</StackPanel>
+					</Grid>
+					
+					
+					<TextBlock>notes</TextBlock>
+					<TextBox TextWrapping="Wrap" Height="120" Text="{Binding Entry.Notes, Mode=TwoWay, UpdateSourceTrigger=Explicit}" TextChanged="textbox_Changed"></TextBox>
+					
+				</StackPanel>
+			</phone:PivotItem>
+
+            <!--Pivot item two-->
+          
+        </phone:Pivot>
+
+		<ProgressBar IsIndeterminate="{Binding IsLoading}" Visibility="{Binding IsLoading, Converter={StaticResource Visibility}}"></ProgressBar>
+	</Grid>
+
+	<phone:PhoneApplicationPage.ApplicationBar>
+		<shell:ApplicationBar IsVisible="True" IsMenuEnabled="False">
+			<shell:ApplicationBarIconButton Click="cancel_Click" IconUri="/Assets/appbar.cancel.png" Text="cancel" />
+			<shell:ApplicationBarIconButton Click="save_Click" IconUri="/Assets/appbar.save.png" Text="save" />
+		</shell:ApplicationBar>
+	</phone:PhoneApplicationPage.ApplicationBar>
+
+
+</local:BaseNewEntryView>

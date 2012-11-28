@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res/com.wshlst.monoforandroid"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+	<ProgressBar
+    android:layout_width="60dp"
+    android:layout_height="60dp"
+    android:layout_gravity="center"
+    local:MvxBind="{'Visibility':{'Path':'IsLoading','Converter':'Visibility'}}"
+      />
+	<LinearLayout
+			android:orientation="vertical"
+			android:minWidth="25px"
+			android:minHeight="25px"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:id="@+id/linearLayout1">
+		<Mvx.MvxBindableListView
+					android:id="@+id/mvxList"
+					android:layout_width="fill_parent"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					local:MvxItemTemplate="@layout/listitem_contact"
+					local:MvxBind="{'ItemsSource':{'Path':'Contacts'}}"
+      />
+		<LinearLayout
+        android:orientation="horizontal"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout2">
+			<Button
+					android:text="Cancel"
+					android:layout_width="wrap_content"
+					android:layout_height="fill_parent"
+					android:id="@+id/buttonCancel"
+					android:layout_weight="0.5" />
+			<Button
+					android:text="Share"
+					android:layout_width="wrap_content"
+					android:layout_height="fill_parent"
+					android:id="@+id/buttonSave"
+					android:layout_weight="0.5" />
+		</LinearLayout>
+	</LinearLayout>
+</FrameLayout>

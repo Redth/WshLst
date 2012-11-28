@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WshLst.MonoForAndroid", "WshLst.MonoForAndroid\WshLst.MonoForAndroid.csproj", "{55DDF2AD-B696-454E-9674-47E73C5BD8E9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WshLst.Core.MonoForAndroid", "WshLst.Core\WshLst.Core.MonoForAndroid.csproj", "{59F784DF-8B47-4A5B-8CCA-EA401739FDCD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{55DDF2AD-B696-454E-9674-47E73C5BD8E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{55DDF2AD-B696-454E-9674-47E73C5BD8E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{55DDF2AD-B696-454E-9674-47E73C5BD8E9}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{55DDF2AD-B696-454E-9674-47E73C5BD8E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{55DDF2AD-B696-454E-9674-47E73C5BD8E9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{59F784DF-8B47-4A5B-8CCA-EA401739FDCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{59F784DF-8B47-4A5B-8CCA-EA401739FDCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{59F784DF-8B47-4A5B-8CCA-EA401739FDCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{59F784DF-8B47-4A5B-8CCA-EA401739FDCD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = WshLst.MonoForAndroid\WshLst.MonoForAndroid.csproj
+	EndGlobalSection
+EndGlobal

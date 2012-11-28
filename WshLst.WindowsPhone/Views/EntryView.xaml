@@ -1,0 +1,67 @@
+﻿<local:BaseEntryView
+    x:Class="WshLst.Views.EntryView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+	xmlns:local="clr-namespace:WshLst.Views;assembly=WshLst"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="True">
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--TitlePanel contains the name of the application and page title-->
+        <StackPanel Grid.Row="0" Margin="12,17,0,28">
+            <TextBlock Text="WSH LST" Style="{StaticResource PhoneTextNormalStyle}"/>
+            <TextBlock Text="{Binding Entry.Name}" Margin="9,-7,0,0" FontSize="48" TextWrapping="Wrap" Style="{StaticResource PhoneTextTitle1Style}"/>
+        </StackPanel>
+
+        <!--ContentPanel - place additional content here-->
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+			<ScrollViewer>
+			<StackPanel>
+
+				<TextBlock FontSize="32">where</TextBlock>
+				<StackPanel Orientation="Horizontal" Margin="10,0,10,10" Opacity="0.7">
+					<TextBlock FontSize="28" Text="{Binding Entry.Store}"></TextBlock>
+				</StackPanel>
+				
+				<TextBlock FontSize="32">price</TextBlock>
+				<StackPanel Orientation="Horizontal" Margin="10,0,10,10" Opacity="0.7">
+					<TextBlock>$</TextBlock>
+					<TextBlock FontSize="28" Text="{Binding Entry.Price}"></TextBlock>
+				</StackPanel>
+			
+				<TextBlock FontSize="32">notes</TextBlock>
+				<TextBlock FontSize="24" Margin="10,0,10,10" Text="{Binding Entry.Notes}" TextWrapping="Wrap" Opacity="0.7"></TextBlock>
+
+				<TextBlock FontSize="32" Visibility="{Binding Entry.Upc, Converter={StaticResource StringToVisibility}}">upc code</TextBlock>
+				<TextBlock FontSize="28" Visibility="{Binding Entry.Upc, Converter={StaticResource StringToVisibility}}" Margin="10,0,10,10" Text="{Binding Entry.Upc}" TextWrapping="Wrap" Opacity="0.7"></TextBlock>
+
+				<TextBlock FontSize="32" Visibility="{Binding HasImage, Converter={StaticResource Visibility}}">image</TextBlock>
+				<Image Visibility="{Binding HasImage, Converter={StaticResource Visibility}}" Source="{Binding EntryImage.ImageBase64, Converter={StaticResource Base64Image}}"></Image>
+								
+				</StackPanel>
+			</ScrollViewer>
+			<ProgressBar IsIndeterminate="{Binding IsLoading}" Visibility="{Binding IsLoading, Converter={StaticResource Visibility}}"></ProgressBar>
+		</Grid>
+    </Grid>
+	<phone:PhoneApplicationPage.ApplicationBar>
+		<shell:ApplicationBar IsVisible="True" IsMenuEnabled="False">
+			<shell:ApplicationBarIconButton Click="delete_Click" IconUri="/Assets/appbar.delete.png" Text="delete" />
+			<shell:ApplicationBarIconButton Click="edit_Click" IconUri="/Assets/appbar.page.edit.png" Text="edit" />
+		</shell:ApplicationBar>
+	</phone:PhoneApplicationPage.ApplicationBar>
+</local:BaseEntryView>

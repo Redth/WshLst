@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res/com.wshlst.monoforandroid"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    >
+	<ProgressBar
+    android:layout_width="60dp"
+    android:layout_height="60dp"
+    android:layout_gravity="center"
+    local:MvxBind="{'Visibility':{'Path':'IsLoading','Converter':'Visibility'}}"
+      />
+	<ScrollView
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent">
+	<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="fill_parent"
+			android:layout_height="fill_parent"
+			android:paddingLeft="10dp"
+			android:paddingRight="10dp">
+		<Button
+        android:text="Scan Barcode"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/buttonScanBarcode"
+        android:layout_marginTop="20dp" />
+		<TextView
+        android:text="What is it called?"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView1"
+        android:layout_marginTop="10dp" />
+		<EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textName"
+        android:hint="Name of Product / Item"
+				local:MvxBind="{'Text':{'Path':'Entry.Name'}}"
+				/>
+		<TableLayout
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tableLayout1"
+        android:stretchColumns="*"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
+			<TableRow
+					android:id="@+id/tableRow1">
+				<LinearLayout
+						android:orientation="vertical"
+						android:minWidth="25px"
+						android:minHeight="25px"
+						android:layout_column="0"
+						android:id="@+id/linearLayout1">
+					<TextView
+							android:text="Where to buy"
+							android:textAppearance="?android:attr/textAppearanceSmall"
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:id="@+id/textView2" />
+					<EditText
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:id="@+id/textStore"
+							android:hint="Store / Place"
+							local:MvxBind="{'Text':{'Path':'Entry.Store'}}"
+							/>
+					<CheckBox
+							android:text="include current location"
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:id="@+id/checkLocation"
+							android:textSize="12sp"
+							local:MvxBind="{'Checked':{'Path':'UseLocation'}}"
+							/>
+					<TextView
+							android:text="How much is it?"
+							android:textAppearance="?android:attr/textAppearanceSmall"
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:id="@+id/textView3" />
+					<EditText
+							android:inputType="numberDecimal"
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:id="@+id/textPrice"
+							android:hint="Price"
+							local:MvxBind="{'Text':{'Path':'Entry.Price'}}"
+							/>
+				</LinearLayout>
+				<LinearLayout
+						android:orientation="vertical"
+						android:minWidth="25px"
+						android:minHeight="25px"
+						android:layout_column="1"
+						android:id="@+id/linearLayout2">
+					<TextView
+							android:text="Photo"
+							android:textAppearance="?android:attr/textAppearanceSmall"
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:id="@+id/textView4" />
+					<ImageView
+							android:src="@android:drawable/ic_menu_gallery"
+							android:layout_width="160dp"
+							android:layout_height="wrap_content"
+							android:scaleType="fitCenter"
+							android:adjustViewBounds="true"
+							android:id="@+id/imagePhoto" />
+					<Button
+							android:text="Add Photo"
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:id="@+id/buttonAddPhoto"
+							android:textSize="16sp" />
+					<Button
+							android:text="Remove Photo"
+							android:layout_width="fill_parent"
+							android:layout_height="wrap_content"
+							android:id="@+id/buttonRemovePhoto"
+							android:textSize="12sp" />
+				</LinearLayout>
+			</TableRow>
+		</TableLayout>
+		<TextView
+        android:text="Notes"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView5" />
+		<MultiAutoCompleteTextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/textNotes"
+        android:hint="Additional Information"
+				local:MvxBind="{'Text':{'Path':'Entry.Notes'}}"
+				/>
+		<LinearLayout
+        android:orientation="horizontal"
+        android:minWidth="25px"
+        android:minHeight="25px"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/linearLayout3"
+        android:layout_marginTop="10dp"
+				android:layout_marginBottom="10dp"
+				>
+			<Button
+					android:text="Cancel"
+					android:layout_width="wrap_content"
+					android:layout_height="fill_parent"
+					android:id="@+id/buttonCancel"
+					android:layout_weight="0.5" />
+			<Button
+					android:text="Save"
+					android:layout_width="wrap_content"
+					android:layout_height="fill_parent"
+					android:id="@+id/buttonSave"
+					android:layout_weight="0.5" />
+		</LinearLayout>
+	</LinearLayout>
+	</ScrollView>
+</FrameLayout>
