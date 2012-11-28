@@ -89,6 +89,11 @@ namespace WshLst.Core.ViewModels
 
 		public bool UseLocation { get; set; }
 
+		public ICommand RemovePhotoCommand
+		{
+			get { return new MvxRelayCommand(RemovePhoto); }
+		}
+
 		public ICommand ScanCommand
 		{
 			get { return new MvxRelayCommand(Scan); }
@@ -129,7 +134,7 @@ namespace WshLst.Core.ViewModels
 
 			AddPhoto(strImg);
 		}
-
+		
 		public void RemovePhoto()
 		{
 			_entryImage.ImageBase64 = string.Empty;

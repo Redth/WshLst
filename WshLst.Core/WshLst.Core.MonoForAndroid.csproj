@@ -57,7 +57,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\MonoForAndroid\Cirrious.MvvmCross.Plugins.Visibility.Droid.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.MobileServices.Android">
+    <Reference Include="Microsoft.WindowsAzure.MobileServices.Android, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\References\MonoForAndroid\Microsoft.WindowsAzure.MobileServices.Android.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -86,7 +87,9 @@
   <Import Project="$(MSBuildExtensionsPath)\Novell\Novell.MonoDroid.CSharp.targets" />
   <ItemGroup />
   <ItemGroup>
+    <Compile Include="AddressBookApplicationObject.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Interfaces\IAddressBookSource.cs" />
     <Compile Include="Interfaces\IBarcodeScanner.cs" />
     <Compile Include="Interfaces\IErrorReporter.cs" />
     <Compile Include="Interfaces\IErrorSource.cs" />
@@ -96,6 +99,7 @@
     <Compile Include="MediaFileApplicationObject.cs" />
     <Compile Include="Models\Entry.cs" />
     <Compile Include="Models\EntryImage.cs" />
+    <Compile Include="Models\SelectableContact.cs" />
     <Compile Include="Models\WishList.cs" />
     <Compile Include="Models\LoginPlatform.cs" />
     <Compile Include="Models\ScanditProduct.cs" />

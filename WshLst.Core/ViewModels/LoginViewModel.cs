@@ -59,33 +59,39 @@ namespace WshLst.Core.ViewModels
 #if MONOANDROID
 			var activity = this.GetService<Cirrious.MvvmCross.Droid.Interfaces.IMvxAndroidCurrentTopActivity>().Activity;
 
-			App.Azure.LoginAsync(activity,  platform.Provider).ContinueWith((t) =>
+            App.Azure.LoginAsync(activity, platform.Provider).ContinueWith((t) => HandleLoginResult(t, platform));
 #elif MONOTOUCH
-			App.Azure.LoginAsync(ViewController, platform.Provider).ContinueWith((t) => 
+            App.Azure.LoginAsync(ViewController, platform.Provider).ContinueWith((t) => HandleLoginResult(t, platform));
 #else
-			App.Azure.LoginAsync(platform.Provider).ContinueWith((t) =>
+            App.Azure.LoginAsync(platform.Provider).ContinueWith((t) => HandleLoginResult(t, platform));
 #endif
-				{
-					IsLoading = false;
 
-					if (t.Status == TaskStatus.RanToCompletion && t.Result != null && !string.IsNullOrEmpty(t.Result.UserId))
-					{
-						//Save our app settings for next launch
-						var settings = this.GetService<ISettingsProvider>();
+		}
 
-						settings.UserId = t.Result.UserId;
-						settings.AuthenticationProvider = (int) platform.Provider;
-						settings.Save();
+		void HandleLoginResult(Task<MobileServiceUser> t, LoginPlatform platform = null)
+		{
+			IsLoading = false;
 
-						//Navigate to the Lists view
-						RequestNavigate<WishListsViewModel>();
-					}
-					else
-					{
-						//Show Error
-						ReportError("Login Failed!");
-					}
-				});
+			if (t.Status == TaskStatus.RanToCompletion && t.Result != null && !string.IsNullOrEmpty(t.Result.UserId))
+			{
+				//Save our app settings for next launch
+				var settings = this.GetService<ISettingsProvider>();
+
+				settings.UserId = t.Result.UserId;
+
+				if (platform != null)
+					settings.AuthenticationProvider = (int)platform.Provider;
+
+				settings.Save();
+
+				//Navigate to the Lists view
+				RequestNavigate<WishListsViewModel>();
+			}
+			else
+			{
+				//Show Error
+				ReportError("Login Failed!");
+			}
 		}
 
 		public void CheckLogin()
@@ -95,10 +101,10 @@ namespace WshLst.Core.ViewModels
 			if (settings.AuthenticationProvider < 0) return;
 			
 			var provider =
-				(MobileServiceAuthenticationProvider)
-				Enum.Parse(typeof (MobileServiceAuthenticationProvider), settings.AuthenticationProvider.ToString());
+				(MobileServiceAuthenticationProvider)Enum.Parse(typeof (MobileServiceAuthenticationProvider), 
+                                                                settings.AuthenticationProvider.ToString());
 
-			Login(new LoginPlatform {Provider = provider, Name = string.Empty});
+            Login(new LoginPlatform {Provider = provider, Name = string.Empty});
 		}
 	}
 }

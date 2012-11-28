@@ -113,12 +113,14 @@
     </SDKReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AddressBookApplicationObject.cs" />
     <Compile Include="App.cs" />
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="BarcodeApplicationObject.cs" />
     <Compile Include="Config.cs" />
     <Compile Include="ErrorApplicationObject.cs" />
     <Compile Include="GeolocatorApplicationObject.cs" />
+    <Compile Include="Interfaces\IAddressBookSource.cs" />
     <Compile Include="Interfaces\IBarcodeScanner.cs" />
     <Compile Include="Interfaces\IErrorReporter.cs" />
     <Compile Include="Interfaces\IErrorSource.cs" />
@@ -130,6 +132,7 @@
     <Compile Include="Models\EntryImage.cs" />
     <Compile Include="Models\LoginPlatform.cs" />
     <Compile Include="Models\ScanditProduct.cs" />
+    <Compile Include="Models\SelectableContact.cs" />
     <Compile Include="Models\WishList.cs" />
     <Compile Include="SettingsApplicationObject.cs" />
     <Compile Include="StartApplicationObject.cs" />

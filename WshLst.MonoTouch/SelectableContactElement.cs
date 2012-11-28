@@ -6,17 +6,18 @@ using MonoTouch.CoreFoundation;
 using MonoTouch.UIKit;
 using CrossUI.Touch.Dialog.Elements;
 using WshLst.Core.ViewModels;
+using WshLst.Core.Models;
 
 namespace WshLst.MonoTouch
 {
 	public class SelectableContactElement : Element
 	{
-		public SelectableContactElement(ShareViewModel.SelectableContact contact) : base(contact.DisplayName)
+		public SelectableContactElement(SelectableContact contact) : base(contact.DisplayName)
 		{
 			this.Contact = contact;
 		}
 
-		public ShareViewModel.SelectableContact Contact { get; set; }
+		public SelectableContact Contact { get; set; }
 
 		protected override UITableViewCell GetCellImpl(UITableView tv)
 		{

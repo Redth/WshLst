@@ -36,5 +36,10 @@ namespace WshLst.MonoForAndroid.Views
 				ViewModel.CheckLogin();
 			}
 		}
+
+		public override void OnBackPressed()
+		{
+			//base.OnBackPressed();
+		}
 	}
 }

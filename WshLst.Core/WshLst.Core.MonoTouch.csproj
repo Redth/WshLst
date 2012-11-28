@@ -45,9 +45,6 @@
     <Reference Include="Cirrious.MvvmCross.Localization">
       <HintPath>..\References\MonoTouch\Cirrious.MvvmCross.Localization.dll</HintPath>
     </Reference>
-    <Reference Include="MicrosoftAzureZumoiOS">
-      <HintPath>..\References\MonoTouch\MicrosoftAzureZumoiOS.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json">
       <HintPath>..\References\MonoTouch\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -59,6 +56,9 @@
     </Reference>
     <Reference Include="Xamarin.Mobile">
       <HintPath>..\References\MonoTouch\Xamarin.Mobile.dll</HintPath>
+    </Reference>
+    <Reference Include="MicrosoftAzureZumoiOS">
+      <HintPath>..\References\MonoTouch\MicrosoftAzureZumoiOS.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -97,5 +97,8 @@
     <Compile Include="Interfaces\IMediaFileSource.cs" />
     <Compile Include="ViewModels\EditWishListViewModel.cs" />
     <Compile Include="Config.cs" />
+    <Compile Include="Interfaces\IAddressBookSource.cs" />
+    <Compile Include="Models\SelectableContact.cs" />
+    <Compile Include="AddressBookApplicationObject.cs" />
   </ItemGroup>
 </Project>

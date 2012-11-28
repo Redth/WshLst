@@ -17,7 +17,7 @@ namespace WshLst.Core
 
 		public string UserId { get; set; }
 		public int AuthenticationProvider { get; set; }
-
+		
 		public void Load()
 		{
 			try

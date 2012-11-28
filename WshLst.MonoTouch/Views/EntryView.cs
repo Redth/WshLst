@@ -36,6 +36,7 @@ namespace WshLst.MonoTouch
 							if (e2.ButtonIndex == 1)
 								ViewModel.Delete();
 						};
+					av.Show();
 				});
 
 			this.SetToolbarItems(new UIBarButtonItem[]

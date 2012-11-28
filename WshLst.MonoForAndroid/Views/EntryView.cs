@@ -35,11 +35,13 @@ namespace WshLst.MonoForAndroid.Views
 						if (ViewModel.HasImage)
 						{
 							var converter = new Base64ToBitmapDrawableConverter();
-							var drawable =
-								(BitmapDrawable)
-								converter.Convert(ViewModel.EntryImage.ImageBase64, typeof (BitmapDrawable), null, CultureInfo.CurrentCulture);
+							var drawable =(BitmapDrawable)converter.Convert(ViewModel.EntryImage.ImageBase64, typeof (BitmapDrawable), null, CultureInfo.CurrentCulture);
 
 							_imagePhoto.SetImageDrawable(drawable);
+						}
+						else
+						{
+							_imagePhoto.SetImageResource(0);	
 						}
 					}
 				};

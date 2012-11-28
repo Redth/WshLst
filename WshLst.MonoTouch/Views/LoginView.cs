@@ -21,6 +21,7 @@ namespace WshLst.MonoTouch
 		{
 			base.ViewDidLoad();
 						
+			NavigationItem.SetHidesBackButton(true, false);
 			Title = "Wsh Lst Login";
 
 			var source = new MvxBindableTableViewSource(TableView, UITableViewCellStyle.Default, new NSString("LoginView"),
@@ -44,7 +45,6 @@ namespace WshLst.MonoTouch
 			TableView.ReloadData();
 
 			ViewModel.ViewController = this;
-			ViewModel.CheckLogin();
 		}
 
 		public override void ViewDidAppear(bool animated)

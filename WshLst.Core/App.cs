@@ -8,13 +8,14 @@ using WshLst.Core.Interfaces;
 namespace WshLst.Core
 {
 	public class App : MvxApplication,
-	                   IMvxServiceProducer<IMvxStartNavigation>,
-	                   IMvxServiceProducer<IErrorReporter>,
-	                   IMvxServiceProducer<IErrorSource>,
-	                   IMvxServiceProducer<ISettingsProvider>,
-	                   IMvxServiceProducer<IGeolocator>,
-	                   IMvxServiceProducer<IBarcodeScanner>,
-	                   IMvxServiceProducer<IMediaFileSource>
+	    IMvxServiceProducer<IMvxStartNavigation>,
+	    IMvxServiceProducer<IErrorReporter>,
+	    IMvxServiceProducer<IErrorSource>,
+	    IMvxServiceProducer<ISettingsProvider>,
+	    IMvxServiceProducer<IGeolocator>,
+	    IMvxServiceProducer<IBarcodeScanner>,
+	    IMvxServiceProducer<IMediaFileSource>,
+		IMvxServiceProducer<IAddressBookSource>
 	{
 		public static bool IsLaunch = true;
 
@@ -22,6 +23,8 @@ namespace WshLst.Core
 
 		public App()
 		{
+			Azure = new MobileServiceClient(Config.AZURE_MOBILE_SERVICE_URL, Config.AZURE_MOBILE_SERVICE_APPKEY);
+
 			var errAppObj = new ErrorApplicationObject();
 			var settings = new Settings();
 			settings.Load();
@@ -37,6 +40,7 @@ namespace WshLst.Core
 
 			this.RegisterServiceInstance<IGeolocator>(geo);
 			this.RegisterServiceInstance<IBarcodeScanner>(new BarcodeApplicatonObject());
+			this.RegisterServiceInstance<IAddressBookSource>(new AddressBookApplicationObject());
 		}
 
 		public static void Logout()

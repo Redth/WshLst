@@ -125,7 +125,7 @@
 							android:layout_width="fill_parent"
 							android:layout_height="wrap_content"
 							android:id="@+id/buttonRemovePhoto"
-							local:MvxBind="{'Visibility':{'Path':'HasImage','Converter':'Visibility'}}"
+							local:MvxBind="{'Click':{'Path':'RemovePhotoCommand'},'Visibility':{'Path':'HasImage','Converter':'Visibility'}}"
 							android:textSize="12sp" />
 				</LinearLayout>
 			</TableRow>

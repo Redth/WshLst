@@ -46,7 +46,7 @@ namespace WshLst.MonoTouch
 
 			_elemImage = new LargeImageElement();
 
-			this.Root = new RootElement("New Item")
+			this.Root = new RootElement(string.IsNullOrEmpty(ViewModel.EntryId) ? "New Item" : "Edit Item")
 			{
 				new Section()
 				{
@@ -59,7 +59,7 @@ namespace WshLst.MonoTouch
 				new Section("Where to buy")
 				{
 					new EntryElement("Store:", "Store / place").Bind(this, "{'Value':{'Path':'Entry.Store'}}"),
-					new CheckboxElement("include current location"),
+					new CheckboxElement("include current location").Bind(this, "{'Value':{'Path':'UseLocation'}}"),
 				},
 				new Section("How much is it?")
 				{

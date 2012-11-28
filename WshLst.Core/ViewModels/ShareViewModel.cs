@@ -4,6 +4,8 @@ using System.Linq;
 using System.Windows.Input;
 using Cirrious.MvvmCross.Commands;
 using Cirrious.MvvmCross.ExtensionMethods;
+using WshLst.Core.Models;
+using WshLst.Core.Interfaces;
 using Xamarin.Contacts;
 
 namespace WshLst.Core.ViewModels
@@ -33,27 +35,8 @@ namespace WshLst.Core.ViewModels
 
 		public void LoadContacts()
 		{
-#if MONOANDROID
-			var androidGlobals = this.GetService<Cirrious.MvvmCross.Droid.Interfaces.IMvxAndroidGlobals>();
-			var ab = new AddressBook(androidGlobals.ApplicationContext);
-#else
-			var ab = new AddressBook();
-#endif
-
-			var allContacts = ab.ToList();
-
-			_contacts = (from c in allContacts
-			             orderby c.DisplayName
-			             where c.Emails != null && c.Emails.Any()
-			             let email = c.Emails.FirstOrDefault()
-			             where email != null && !string.IsNullOrEmpty(email.Address)
-			             select
-				             new SelectableContact
-					             {
-						             DisplayName = c.DisplayName,
-						             Email = email.Address,
-						             IsSelected = false
-					             }).ToList();
+			var addressBook = this.GetService<IAddressBookSource>();
+			_contacts = addressBook.GetContactsWithEmailAddresses().ToList();
 
 			RaisePropertyChanged(() => Contacts);
 		}
@@ -98,34 +81,6 @@ namespace WshLst.Core.ViewModels
 			var url = string.Format(Config.AZURE_WEBSITE_URL + "/?id={0}", ListGuid);
 
 			return "Hi, I'd like to share my wish list with you!  You can see my Wish List online at: \r\n\r\n" + url;
-		}
-
-		public class SelectableContact
-		{
-			public bool IsSelected { get; set; }
-			public string DisplayName { get; set; }
-			public string Email { get; set; }
-		}
-
-		public class SelectableContactGroup : IEnumerable<SelectableContact>
-		{
-			public string Title { get; set; }
-			public List<SelectableContact> Items { get; set; }
-
-			IEnumerator IEnumerable.GetEnumerator()
-			{
-				return Items.GetEnumerator();
-			}
-
-			IEnumerator<SelectableContact> IEnumerable<SelectableContact>.GetEnumerator()
-			{
-				return Items.GetEnumerator();
-			}
-
-			public IEnumerator<SelectableContact> GetEnumerator()
-			{
-				return Items.GetEnumerator();
-			}
 		}
 	}
 }
