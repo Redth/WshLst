@@ -74,7 +74,7 @@ namespace WshLst.Core.ViewModels
 
 		public string GetEmailBody()
 		{
-			var url = string.Format("https://wshlst.azurewebsites.net/?id={0}", this.ListGuid);
+			var url = string.Format(WshLst.Core.Config.AZURE_WEBSITE_URL + "/?id={0}", this.ListGuid);
 
 			return "Hi, I'd like to share my wish list with you!  You can see my Wish List online at: \r\n\r\n" + url;
 		}
