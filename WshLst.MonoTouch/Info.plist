@@ -2,22 +2,26 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleDisplayName</key>
+	<string>Wsh Lst</string>
+	<key>CFBundleIconFiles</key>
+	<array>
+		<string>Images/Icon.png</string>
+		<string>Images/Icon@2x.png</string>
+	</array>
+	<key>CFBundleIdentifier</key>
+	<string>com.wshlst.app</string>
+	<key>CFBundleVersion</key>
+	<string>1.0</string>
+	<key>UIDeviceFamily</key>
+	<array>
+		<integer>1</integer>
+	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>CFBundleIconFiles</key>
-	<array>
-		<string>Icon</string>
-		<string>Icon@2x</string>
-	</array>
-	<key>CFBundleDisplayName</key>
-	<string>Wsh Lst</string>
-	<key>CFBundleIdentifier</key>
-	<string>com.wshlst.app</string>
-	<key>CFBundleVersion</key>
-	<string>1.0</string>
 </dict>
 </plist>

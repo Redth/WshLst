@@ -56,7 +56,7 @@ The goal of this application was an entry into the contest, specifically showing
 At the time of creating this project, Wsh Lst makes heavy use of the latest version of MvvmCross which in turn uses Portable Class libraries (PCL’s) extensively.  At this time, there are a few tweaks you must make to your system(s) before you may be able to compile the project.  The main issue is that the Mono for Android and MonoTouch profiles do not recognize Portable Class Libraries (PCL’s) as valid profile types to reference.  We need to ‘trick’ visual studio into allowing us to reference these PCL’s.
 
 #####Windows Setup:#####
-In order to get Visual Studio Mono for Android projects to be able to reference Portable Class Libraries, we need to trick it.
+Since this app uses prebuilt binaries of MvvmCross, it should build for you as is, however if you have porblems getting the Android app to build, we need to trick Visual Studio Mono for Android projects to be able to reference Portable Class Libraries:
 
 1. Open the folder: *C:\Program Files (x86)\Referenced Assemblies\Microsoft\Framework\.NETPortable\v4.0\Profile\Profile104\SupportedFrameworks\\*
 2. Create a new file named *MonoAndroid,Version=v1.6+.xml* with the following contents:
