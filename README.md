@@ -116,6 +116,12 @@ Without these optional steps you will be unable to utilize the Google Places or 
 	1. Set the GOOGLE\_PLACES\_API\_KEY to the key you just created
 	2. Set the SCANDIT\_API\_KEY to the key you just created
 
+----------
+
+###TROUBLESHOOTING###
+
+1. iOS App Crashes - Try increasing the number of trampolines: [http://docs.xamarin.com/ios/troubleshooting#Ran_out_of_trampolines_of_type_2](http://docs.xamarin.com/ios/troubleshooting#Ran_out_of_trampolines_of_type_2)
+
 
 ----------
 
