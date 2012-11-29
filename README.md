@@ -132,3 +132,11 @@ Without these optional steps you will be unable to utilize the Google Places or 
 - Xamarin - Thanks to all the folks at Xamarin who make coding for mobile in C# a dream :)
 - Stuart Lodge (@slodge) - Thanks for your work on MvvmCross, and awesome library, and all the one on one help and effort you put into it!
 - @micjahn - Thanks for your ZXing.Net C# port of the ZXing project! 
+
+
+----------
+
+##LICENSE##
+Apache WshLst Copyright 2012 The Apache Software Foundation
+
+This product includes software developed at The Apache Software Foundation (http://www.apache.org/).
