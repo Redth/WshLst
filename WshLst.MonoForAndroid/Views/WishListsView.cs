@@ -47,11 +47,7 @@ namespace WshLst.MonoForAndroid.Views
 			if (menuItem.TitleFormatted.ToString().Equals("Delete Wish List"))
 			{
 				this.ShowQuestion("Delete?", "Are you sure you want to delete this Wish List and all the items on it?", "Yes", "No",
-				                  () =>
-					                  {
-						                  ViewModel.Delete((WishList) item.Object);
-						                  ViewModel.LoadLists();
-					                  }, null);
+				                  () => ViewModel.Delete((WishList) item.Object), null);
 			}
 			else
 			{

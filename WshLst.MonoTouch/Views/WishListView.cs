@@ -18,6 +18,7 @@ namespace WshLst.MonoTouch
 		{
 		}
 
+		UIBarButtonItem buttonEdit = new UIBarButtonItem(UIBarButtonSystemItem.Edit);
 		UIBarButtonItem buttonAdd = new UIBarButtonItem(UIBarButtonSystemItem.Add);
 		UIBarButtonItem buttonShare;
 
@@ -50,8 +51,11 @@ namespace WshLst.MonoTouch
 				ViewModel.Delete(entry);
 			};
 
+			buttonEdit.Clicked += (sender, e) => ViewModel.EditWishList();
 			buttonAdd.Clicked += (sender, e) => ViewModel.Add();
 			buttonShare = new UIBarButtonItem("Share", UIBarButtonItemStyle.Bordered, (s, e) => ViewModel.Share());
+
+			NavigationItem.RightBarButtonItem = buttonEdit;
 
 			SetToolbarItems(new UIBarButtonItem[]
 	            {

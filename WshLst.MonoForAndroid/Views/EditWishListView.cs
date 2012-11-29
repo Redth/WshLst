@@ -24,6 +24,8 @@ namespace WshLst.MonoForAndroid.Views
 							break;
 					}
 				};
+
+			ViewModel.LoadList();
 		}
 	}
 }

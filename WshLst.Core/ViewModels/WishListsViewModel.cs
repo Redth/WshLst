@@ -78,9 +78,9 @@ namespace WshLst.Core.ViewModels
 					}
 					else
 					{
-						this.InvokeOnMainThread(() => _lists.Remove(item));
+						InvokeOnMainThread(() => _lists.Remove(item));
 						
-						RaisePropertyChanged("Lists");
+						RaisePropertyChanged(() => Lists);
 					}
 				});
 		}

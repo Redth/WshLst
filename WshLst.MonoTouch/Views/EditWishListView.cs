@@ -40,6 +40,8 @@ namespace WshLst.MonoTouch
 					new EntryElement("Description", "Description").Bind(this, "{'Value':{'Path':'Description'}}")
 				}
 			};
+
+			ViewModel.LoadList();
 		}
 	}
 }

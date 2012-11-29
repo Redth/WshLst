@@ -33,9 +33,7 @@ namespace WshLst.MonoForAndroid.Views
 			ViewModel.PropertyChanged += (s, e) =>
 				{
 					if (e.PropertyName.Equals("WishList"))
-					{
 						Title = ViewModel.WishList.Name;
-					}
 				};
 
 			ViewModel.LoadListAndItems();
@@ -65,11 +63,7 @@ namespace WshLst.MonoForAndroid.Views
 				var item = (MvxJavaContainer) _list.Adapter.GetItem(cmi.Position);
 
 				this.ShowQuestion("Delete?", "Are you sure you want to delete this item?", "Yes", "No",
-				                  () =>
-					                  {
-						                  ViewModel.Delete((Entry) item.Object);
-						                  ViewModel.LoadItems();
-					                  }, null);
+				                  () => ViewModel.Delete((Entry) item.Object), null);
 			}
 
 			return true;
