@@ -1,3 +1,8 @@
+#UPDATE: December 17, 2012#
+##Wsh Lst Wins Xamarin Developer Showdown - Best Windows Phone Platform##
+Huge thanks to Xamarin for choosing Wsh Lst as a winner!  Congrats to Stuart Lodge for taking the grand prize!
+Read the Full Blog Post at Xamarin: http://blog.xamarin.com/2012/12/17/xamarin-developer-showdown-winning-entries-showcase-xamarin-mobile/
+
 # WshLst #
 #### a Wish List app for Xamarin’s Developer Showdown ####
 
